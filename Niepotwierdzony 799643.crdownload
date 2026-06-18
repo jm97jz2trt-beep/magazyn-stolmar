@@ -1,0 +1,280 @@
+// Dane aplikacji
+let materials = [];
+let filteredMaterials = [];
+let currentView = 'list';
+let currentCategory = 'ALL';
+
+const STORAGE_KEY = 'storageMarMaterials';
+
+// Kategorie
+const CATEGORIES = ['ABS', 'Płyty'];
+
+// DOM Elements
+const app = document.getElementById('app');
+
+// Inicjalizacja
+function init() {
+    loadData();
+    renderApp();
+    setupEventListeners();
+}
+
+// Załaduj dane z LocalStorage
+function loadData() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+        materials = JSON.parse(stored);
+    } else {
+        // Przykładowe dane
+        materials = [
+            { id: 1, code: 'H1180', name: 'ABS Czarny', category: 'ABS', stock: 25 },
+            { id: 2, code: 'H2240', name: 'ABS Biały', category: 'ABS', stock: 15 },
+            { id: 3, code: 'P8810', name: 'Płyta Dąb', category: 'Płyty', stock: 8 },
+            { id: 4, code: 'P9920', name: 'Płyta Buk', category: 'Płyty', stock: 22 },
+        ];
+        saveData();
+    }
+    filteredMaterials = [...materials];
+}
+
+// Zapisz dane do LocalStorage
+function saveData() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(materials));
+}
+
+// Renderuj całą aplikację
+function renderApp() {
+    app.innerHTML = `
+        <div class="app-header">
+            <h1>📦 StolMar Magazyn</h1>
+            <p>Egger Materials</p>
+        </div>
+        
+        <div id="list-view" class="view active">
+            <input type="text" id="search-input" class="search-bar" placeholder="Szukaj materiału...">
+            
+            <div class="tabs" id="category-tabs">
+                ${['ALL', ...CATEGORIES].map(cat => 
+                    `<button class="tab-btn ${currentCategory === cat ? 'active' : ''}" 
+                             data-category="${cat}">${cat}</button>`
+                ).join('')}
+            </div>
+            
+            <div class="materials-list" id="materials-list">
+                ${renderMaterialsList()}
+            </div>
+        </div>
+        
+        <div id="add-view" class="view">
+            <div class="add-form">
+                <h2>Dodaj materiał</h2>
+                <div class="form-group">
+                    <label>Kod</label>
+                    <input type="text" id="code-input" placeholder="np. H1180">
+                </div>
+                <div class="form-group">
+                    <label>Nazwa</label>
+                    <input type="text" id="name-input" placeholder="np. ABS Czarny">
+                </div>
+                <div class="form-group">
+                    <label>Kategoria</label>
+                    <select id="category-select">
+                        ${CATEGORIES.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ilość na stanie</label>
+                    <input type="number" id="stock-input" placeholder="0" value="0">
+                </div>
+                <button class="submit-btn" id="add-btn">Dodaj materiał</button>
+            </div>
+        </div>
+        
+        <div class="profile-icon" id="profile-icon">👤</div>
+        
+        <div class="bottom-nav">
+            <button class="nav-btn active" data-view="list-view">📋 Lista</button>
+            <button class="nav-btn" data-view="add-view">➕ Dodaj</button>
+        </div>
+        
+        <div id="admin-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Panel Admin</h2>
+                <p>Materiały na stanie: <strong id="total-count">0</strong></p>
+                <button class="admin-btn success" id="export-btn">📥 Eksportuj dane (JSON)</button>
+                <button class="admin-btn danger" id="clear-btn">🗑️ Wyczyść wszystkie dane</button>
+            </div>
+        </div>
+    `;
+}
+
+// Renderuj listę materiałów
+function renderMaterialsList() {
+    if (filteredMaterials.length === 0) {
+        return '<p style="text-align: center; padding: 20px; color: #999;">Brak materiałów</p>';
+    }
+    
+    return filteredMaterials.map(mat => {
+        const stockClass = mat.stock > 20 ? 'stock-high' : mat.stock >= 10 ? 'stock-medium' : 'stock-low';
+        return `
+            <div class="material-item">
+                <div class="material-info">
+                    <h3>${mat.name}</h3>
+                    <p><strong>${mat.code}</strong> • ${mat.category}</p>
+                </div>
+                <div class="qty-controls">
+                    <button class="qty-btn" data-action="dec" data-id="${mat.id}">−</button>
+                    <div class="stock-level ${stockClass}">${mat.stock}</div>
+                    <button class="qty-btn" data-action="inc" data-id="${mat.id}">+</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Event Listenery
+function setupEventListeners() {
+    // Szukanie
+    document.getElementById('search-input').addEventListener('input', handleSearch);
+    
+    // Kategorie
+    document.querySelectorAll('[data-category]').forEach(btn => {
+        btn.addEventListener('click', handleCategoryChange);
+    });
+    
+    // Nawigacja
+    document.querySelectorAll('[data-view]').forEach(btn => {
+        btn.addEventListener('click', handleNavigation);
+    });
+    
+    // Dodawanie materiału
+    document.getElementById('add-btn').addEventListener('click', handleAddMaterial);
+    
+    // Ilość materiału
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('qty-btn')) {
+            const id = parseInt(e.target.dataset.id);
+            const action = e.target.dataset.action;
+            const mat = materials.find(m => m.id === id);
+            if (mat) {
+                if (action === 'inc') mat.stock++;
+                if (action === 'dec' && mat.stock > 0) mat.stock--;
+                saveData();
+                filterAndRender();
+            }
+        }
+    });
+    
+    // Admin panel
+    document.getElementById('profile-icon').addEventListener('click', openAdminPanel);
+    document.querySelector('.close-modal').addEventListener('click', closeAdminPanel);
+    document.getElementById('export-btn').addEventListener('click', exportData);
+    document.getElementById('clear-btn').addEventListener('click', clearData);
+    document.getElementById('admin-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'admin-modal') closeAdminPanel();
+    });
+}
+
+// Wyszukiwanie
+function handleSearch(e) {
+    const query = e.target.value.toLowerCase();
+    filteredMaterials = materials.filter(m =>
+        (currentCategory === 'ALL' || m.category === currentCategory) &&
+        (m.name.toLowerCase().includes(query) || m.code.toLowerCase().includes(query))
+    );
+    document.getElementById('materials-list').innerHTML = renderMaterialsList();
+}
+
+// Zmiana kategorii
+function handleCategoryChange(e) {
+    currentCategory = e.target.dataset.category;
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    e.target.classList.add('active');
+    filterAndRender();
+}
+
+// Filtrowanie i renderowanie
+function filterAndRender() {
+    const search = document.getElementById('search-input')?.value.toLowerCase() || '';
+    filteredMaterials = materials.filter(m =>
+        (currentCategory === 'ALL' || m.category === currentCategory) &&
+        (m.name.toLowerCase().includes(search) || m.code.toLowerCase().includes(search))
+    );
+    document.getElementById('materials-list').innerHTML = renderMaterialsList();
+}
+
+// Nawigacja
+function handleNavigation(e) {
+    currentView = e.target.dataset.view;
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(currentView).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+}
+
+// Dodaj materiał
+function handleAddMaterial() {
+    const code = document.getElementById('code-input').value.trim();
+    const name = document.getElementById('name-input').value.trim();
+    const category = document.getElementById('category-select').value;
+    const stock = parseInt(document.getElementById('stock-input').value) || 0;
+    
+    if (!code || !name) {
+        alert('Wypełnij wszystkie pola!');
+        return;
+    }
+    
+    const newMaterial = {
+        id: Math.max(...materials.map(m => m.id), 0) + 1,
+        code,
+        name,
+        category,
+        stock
+    };
+    
+    materials.push(newMaterial);
+    saveData();
+    
+    document.getElementById('code-input').value = '';
+    document.getElementById('name-input').value = '';
+    document.getElementById('stock-input').value = '0';
+    
+    alert('Materiał dodany!');
+    filterAndRender();
+}
+
+// Admin panel
+function openAdminPanel() {
+    document.getElementById('admin-modal').classList.add('active');
+    document.getElementById('total-count').textContent = materials.length;
+}
+
+function closeAdminPanel() {
+    document.getElementById('admin-modal').classList.remove('active');
+}
+
+function exportData() {
+    const dataStr = JSON.stringify(materials, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `stolmar-backup-${new Date().toISOString().slice(0,10)}.json`;
+    link.click();
+}
+
+function clearData() {
+    if (confirm('Czy na pewno? Wszystkie dane będą usunięte!')) {
+        materials = [];
+        saveData();
+        renderApp();
+        setupEventListeners();
+        closeAdminPanel();
+    }
+}
+
+// Inicjuj aplikację
+window.addEventListener('load', init);

@@ -3,166 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="description" content="StolMar Magazyn - Zarządzanie magazynem materiałów">
-    
+    <meta name="theme-color" content="#1a1a1a">
     <title>StolMar Magazyn</title>
-    
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-    <link rel="apple-touch-icon" href="icon-192.png">
-    
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23000' width='192' height='192'/><text x='50%' y='50%' font-size='100' fill='%23fff' text-anchor='middle' dominant-baseline='central'>SM</text></svg>">
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-content">
-                <h1 class="app-title">StolMar</h1>
-                <p class="app-subtitle">Magazyn</p>
-            </div>
-            <div class="header-info">
-                <span class="producer">Egger</span>
-                <button class="admin-btn" id="adminBtn">👤</button>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="app-main">
-            <!-- Search Bar -->
-            <div class="search-container">
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    class="search-input" 
-                    placeholder="Szukaj materiału..."
-                    autocomplete="off"
-                >
-                <span class="search-icon">🔍</span>
-            </div>
-
-            <!-- Category Tabs -->
-            <div class="category-tabs">
-                <button class="tab-btn active" data-category="all">
-                    Wszystko
-                </button>
-                <button class="tab-btn" data-category="ABS">
-                    ABS
-                </button>
-                <button class="tab-btn" data-category="Płyty">
-                    Płyty
-                </button>
-            </div>
-
-            <!-- Materials List -->
-            <div class="materials-container">
-                <ul class="materials-list" id="materialsList">
-                    <!-- Dynamicznie generowana lista -->
-                </ul>
-                <div class="empty-state" id="emptyState">
-                    <p>📦 Brak materiałów</p>
-                    <p class="empty-subtitle">Dodaj pierwszy materiał klikając przycisk poniżej</p>
-                </div>
-            </div>
-        </main>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <button class="nav-btn active" data-view="list">
-                <span class="nav-icon">📋</span>
-                <span class="nav-label">Lista</span>
-            </button>
-            <button class="nav-btn" data-view="add">
-                <span class="nav-icon">➕</span>
-                <span class="nav-label">Dodaj</span>
-            </button>
-            <button class="nav-btn" id="installBtn" style="display: none;">
-                <span class="nav-icon">⬇️</span>
-                <span class="nav-label">Instaluj</span>
-            </button>
-        </nav>
-    </div>
-
-    <!-- Add Material Modal -->
-    <div class="modal" id="addModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Dodaj materiał</h2>
-                <button class="close-btn" id="closeModal">&times;</button>
-            </div>
-            <form id="addForm" class="form">
-                <div class="form-group">
-                    <label for="materialCode">Kod materiału</label>
-                    <input 
-                        type="text" 
-                        id="materialCode" 
-                        placeholder="np. H1180"
-                        required
-                    >
-                </div>
-                <div class="form-group">
-                    <label for="materialName">Nazwa</label>
-                    <input 
-                        type="text" 
-                        id="materialName" 
-                        placeholder="np. Halifax"
-                        required
-                    >
-                </div>
-                <div class="form-group">
-                    <label for="materialCategory">Kategoria</label>
-                    <select id="materialCategory" required>
-                        <option value="">Wybierz kategorię</option>
-                        <option value="ABS">ABS</option>
-                        <option value="Płyty">Płyty</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="materialStock">Stan magazynowy</label>
-                    <input 
-                        type="number" 
-                        id="materialStock" 
-                        placeholder="0"
-                        min="0"
-                        value="0"
-                        required
-                    >
-                </div>
-                <button type="submit" class="btn-submit">Dodaj materiał</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Admin Modal -->
-    <div class="modal" id="adminModal">
-        <div class="modal-content admin-modal">
-            <div class="modal-header">
-                <h2>Panel administratora</h2>
-                <button class="close-btn" id="closeAdminModal">&times;</button>
-            </div>
-            <div class="admin-panel">
-                <div class="admin-info">
-                    <p><strong>Konto:</strong> Administrator</p>
-                    <p><strong>Producent:</strong> Egger</p>
-                    <p><strong>Materiały:</strong> <span id="materialCount">0</span></p>
-                </div>
-                <div class="admin-actions">
-                    <button class="btn-danger" id="clearDataBtn">
-                        🗑️ Wyczyść dane
-                    </button>
-                    <button class="btn-secondary" id="exportDataBtn">
-                        📥 Eksportuj dane
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
-
+    <div id="app"></div>
     <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
+        }
+    </script>
 </body>
 </html>
