@@ -2,11 +2,11 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StolMar Magazyn</title>
-    <meta name="theme-color" content="#1a1a1a">
-    <meta name="description" content="Responsywny magazyn materiałów Egger">
-    <link rel="manifest" href="manifest.json">
     <style>
         * {
             margin: 0;
@@ -18,43 +18,33 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f5f5;
             color: #333;
-            overflow-x: hidden;
         }
 
-        /* HEADER */
-        #header {
-            position: sticky;
-            top: 0;
+        header {
             background-color: #1a1a1a;
             color: white;
             padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            justify-content: space-between;
         }
 
-        #header img {
-            height: 40px;
-            object-fit: contain;
-        }
-
-        #header h1 {
+        header .logo-text {
             font-size: 18px;
-            font-weight: 600;
-            flex: 1;
-            text-align: center;
-            margin: 0 20px;
+            font-weight: bold;
         }
 
-        .header-right {
+        header .filters {
             display: flex;
             gap: 10px;
             align-items: center;
         }
 
-        .header-btn {
+        header .filters button {
             background-color: #cc3333;
             color: white;
             border: none;
@@ -65,14 +55,156 @@
             transition: background-color 0.3s;
         }
 
-        .header-btn:hover {
-            background-color: #aa2222;
+        header .filters button:hover,
+        header .filters button.active {
+            background-color: #990000;
         }
 
-        /* MAIN CONTENT */
-        #mainContent {
+        header .search-box {
+            flex: 1;
+            max-width: 300px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        main {
+            padding: 20px;
             padding-bottom: 80px;
-            padding-top: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .material-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 5px solid #ddd;
+        }
+
+        .material-card.dobry {
+            border-left-color: #28a745;
+        }
+
+        .material-card.niski {
+            border-left-color: #ffc107;
+        }
+
+        .material-card.krytyczny {
+            border-left-color: #cc3333;
+        }
+
+        .material-card h3 {
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        .material-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .stock-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .status-icon {
+            font-size: 16px;
+        }
+
+        .quick-add-section {
+            background-color: #f9f9f9;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .quick-add-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .quick-add-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .quick-add-group label {
+            font-size: 13px;
+            color: #555;
+            min-width: 60px;
+        }
+
+        .quick-add-group button {
+            background-color: #cc3333;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .quick-add-group button:hover {
+            background-color: #990000;
+        }
+
+        .quick-add-group button.minus {
+            background-color: #666;
+        }
+
+        .quick-add-group button.minus:hover {
+            background-color: #333;
+        }
+
+        .quick-add-group input {
+            width: 70px;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #1a1a1a;
+            display: flex;
+            gap: 0;
+            z-index: 101;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
+        }
+
+        .bottom-nav button {
+            flex: 1;
+            background-color: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .bottom-nav button:hover,
+        .bottom-nav button.active {
+            background-color: #cc3333;
         }
 
         .view {
@@ -83,639 +215,196 @@
             display: block;
         }
 
-        /* LISTA MATERIAŁÓW */
-        .search-bar {
-            margin: 0 20px 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .search-bar input {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .search-bar select {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .materials-list {
-            margin: 0 20px;
-        }
-
-        .material-card {
-            background: white;
-            border-left: 4px solid #999;
-            padding: 15px;
-            margin-bottom: 12px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-
-        .material-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-
-        .material-card.dobry {
-            border-left-color: #28a745;
-            background-color: #f0f9f6;
-        }
-
-        .material-card.niski {
-            border-left-color: #ffc107;
-            background-color: #fffaf0;
-        }
-
-        .material-card.krytyczny {
-            border-left-color: #cc3333;
-            background-color: #fff5f5;
-        }
-
-        .material-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .material-info {
-            flex: 1;
-        }
-
-        .material-type {
-            display: inline-block;
-            background-color: #333;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 3px;
-            font-size: 11px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .material-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1a1a1a;
-        }
-
-        .material-details {
-            display: flex;
-            gap: 15px;
-            margin: 8px 0;
-            font-size: 13px;
-            color: #666;
-            flex-wrap: wrap;
-        }
-
-        .material-detail-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .material-detail-label {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .status-dobry {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .status-niski {
-            background-color: #ffc107;
-            color: #333;
-        }
-
-        .status-krytyczny {
-            background-color: #cc3333;
-            color: white;
-        }
-
-        .material-qty {
-            text-align: right;
-        }
-
-        .qty-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1a1a1a;
-            margin: 5px 0;
-        }
-
-        .qty-unit {
-            font-size: 12px;
-            color: #999;
-        }
-
-        /* NEW: QUICK ADD CONTROLS */
-        .qty-quick-add {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .qty-quick-add-group {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background-color: #f9f9f9;
-            padding: 6px 10px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
-
-        .qty-quick-btn {
-            background-color: #cc3333;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            transition: background-color 0.2s;
-            min-width: 40px;
-        }
-
-        .qty-quick-btn:hover {
-            background-color: #aa2222;
-        }
-
-        .qty-input {
-            width: 60px;
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .qty-input:focus {
-            outline: none;
-            border-color: #cc3333;
-            box-shadow: 0 0 0 2px rgba(204, 51, 51, 0.1);
-        }
-
-        .qty-unit-small {
-            font-size: 12px;
-            color: #666;
-            font-weight: 600;
-            min-width: 30px;
-        }
-
-        /* MATERIAL ACTIONS */
-        .material-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: background-color 0.2s;
-        }
-
-        .edit-btn {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .edit-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .delete-btn {
-            background-color: #cc3333;
-            color: white;
-        }
-
-        .delete-btn:hover {
-            background-color: #aa2222;
-        }
-
-        /* FORMULARZ */
-        #addView {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
         .form-group {
-            margin: 0 20px 20px;
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 15px;
         }
 
         .form-group label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #1a1a1a;
         }
 
         .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 12px;
+        .form-group select {
+            width: 100%;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 14px;
-            font-family: inherit;
         }
 
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #cc3333;
-            box-shadow: 0 0 0 3px rgba(204, 51, 51, 0.1);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .form-buttons {
-            display: flex;
-            gap: 10px;
-            margin: 0 20px 20px;
-        }
-
-        .form-buttons button {
-            flex: 1;
-            padding: 12px;
+        button.submit-btn {
+            background-color: #cc3333;
+            color: white;
+            padding: 12px 20px;
             border: none;
             border-radius: 4px;
-            font-size: 14px;
-            font-weight: 600;
             cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            font-weight: bold;
             transition: background-color 0.3s;
         }
 
-        .submit-btn {
-            background-color: #28a745;
-            color: white;
+        button.submit-btn:hover {
+            background-color: #990000;
         }
 
-        .submit-btn:hover {
-            background-color: #218838;
+        .admin-panel {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
         }
 
-        .cancel-btn {
-            background-color: #6c757d;
-            color: white;
-        }
-
-        .cancel-btn:hover {
-            background-color: #5a6268;
-        }
-
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            max-width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .modal-header {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 20px;
+        .admin-panel h4 {
+            margin-bottom: 10px;
             color: #1a1a1a;
         }
 
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            justify-content: flex-end;
-        }
-
-        .modal-btn {
-            padding: 10px 20px;
+        .admin-panel button {
+            background-color: #666;
+            color: white;
+            padding: 10px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
         }
 
-        .modal-confirm {
-            background-color: #28a745;
-            color: white;
+        .admin-panel button:hover {
+            background-color: #333;
         }
 
-        .modal-confirm:hover {
-            background-color: #218838;
-        }
-
-        .modal-cancel {
-            background-color: #6c757d;
-            color: white;
-        }
-
-        .modal-cancel:hover {
-            background-color: #5a6268;
-        }
-
-        .modal-delete {
-            background-color: #cc3333;
-            color: white;
-        }
-
-        .modal-delete:hover {
-            background-color: #aa2222;
-        }
-
-        /* BOTTOM NAVIGATION */
-        #bottomNav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #1a1a1a;
-            display: flex;
-            border-top: 1px solid #333;
-            z-index: 1000;
-        }
-
-        .nav-btn {
-            flex: 1;
-            padding: 12px;
-            background: none;
-            border: none;
-            color: #999;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            transition: color 0.3s;
-        }
-
-        .nav-btn.active {
-            color: #cc3333;
-            border-top: 3px solid #cc3333;
-        }
-
-        .nav-icon {
-            font-size: 20px;
-        }
-
-        /* EMPTY STATE */
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: 40px 20px;
             color: #999;
         }
 
-        .empty-state-icon {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-
-        .empty-state-text {
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        /* ADMIN PANEL */
-        .admin-section {
-            margin: 20px;
-            background: white;
-            padding: 20px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .admin-section h3 {
-            margin-bottom: 15px;
-            color: #1a1a1a;
+        .empty-state p {
+            margin-top: 10px;
             font-size: 16px;
         }
 
-        .admin-btn {
-            display: block;
-            width: 100%;
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
             padding: 12px;
-            margin-bottom: 10px;
-            background-color: #cc3333;
-            color: white;
-            border: none;
             border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s;
+            margin-bottom: 15px;
+            display: none;
         }
 
-        .admin-btn:hover {
-            background-color: #aa2222;
+        .success-message.show {
+            display: block;
+            animation: slideDown 0.3s ease;
         }
 
-        .admin-btn.secondary {
-            background-color: #007bff;
-        }
-
-        .admin-btn.secondary:hover {
-            background-color: #0056b3;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 600px) {
-            #header h1 {
-                font-size: 16px;
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
             }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-            .material-header {
+        @media (max-width: 768px) {
+            header {
                 flex-direction: column;
+                gap: 10px;
             }
 
-            .qty-quick-add {
+            header .filters {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            header .search-box {
+                max-width: 100%;
+            }
+
+            .quick-add-group {
                 flex-direction: column;
-                width: 100%;
+                align-items: stretch;
             }
 
-            .qty-quick-add-group {
+            .quick-add-group label {
+                min-width: auto;
+            }
+
+            .quick-add-group button,
+            .quick-add-group input {
                 width: 100%;
-                justify-content: space-between;
             }
         }
     </style>
 </head>
 <body>
-    <!-- HEADER -->
-    <header id="header">
-        <img src="1STOL MAR LOGO CZARN copy.png" alt="StolMar Logo">
-        <h1>Magazyn</h1>
-        <div class="header-right">
-            <button class="header-btn" id="adminBtn">Admin</button>
+    <header>
+        <div class="logo-text">1STOL MAR</div>
+        <div class="filters">
+            <input type="text" class="search-box" placeholder="Szukaj..." id="searchInput">
+            <button id="filterAll" class="active">Wszystko</button>
+            <button id="filterGood">✅ Dobry</button>
+            <button id="filterLow">⚠️ Niski</button>
+            <button id="filterCritical">🔴 Krytyczny</button>
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
-    <main id="mainContent">
-        <!-- LIST VIEW -->
+    <main>
+        <div id="successMessage" class="success-message"></div>
+        
         <div id="listView" class="view active">
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Szukaj materiału...">
-                <select id="statusFilter">
-                    <option value="">Wszystkie</option>
-                    <option value="dobry">✅ Dobry</option>
-                    <option value="niski">⚠️ Niski</option>
-                    <option value="krytyczny">🔴 Krytyczny</option>
-                </select>
-            </div>
-            <div class="materials-list" id="materialsList">
-                <!-- Materiały będą tutaj renderowane -->
-            </div>
+            <div id="materialsList"></div>
         </div>
 
-        <!-- ADD VIEW -->
         <div id="addView" class="view">
+            <h2>Dodaj nowy materiał</h2>
             <form id="addForm">
                 <div class="form-group">
-                    <label for="materialType">Typ materiału *</label>
+                    <label for="materialName">Nazwa materiału:</label>
+                    <input type="text" id="materialName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="materialType">Typ:</label>
                     <select id="materialType" required>
-                        <option value="">-- Wybierz --</option>
+                        <option value="">-- Wybierz typ --</option>
                         <option value="ABS">ABS</option>
                         <option value="Płyty">Płyty</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="materialName">Nazwa *</label>
-                    <input type="text" id="materialName" required>
-                </div>
-                <div class="form-group">
-                    <label for="materialColor">Kolor *</label>
-                    <input type="text" id="materialColor" required>
-                </div>
-                <div class="form-group">
-                    <label for="materialCode">Kod artykułu</label>
-                    <input type="text" id="materialCode">
-                </div>
-                <div class="form-group">
-                    <label for="materialQuantity">Ilość *</label>
-                    <input type="number" id="materialQuantity" required min="0">
-                </div>
-                <div class="form-group">
-                    <label for="materialNotes">Notatki</label>
-                    <textarea id="materialNotes"></textarea>
-                </div>
-                <div class="form-buttons">
-                    <button type="submit" class="submit-btn">Dodaj</button>
-                    <button type="button" class="cancel-btn" id="cancelBtn">Anuluj</button>
-                </div>
-            </form>
-        </div>
 
-        <!-- ADMIN VIEW -->
-        <div id="adminView" class="view">
-            <div class="admin-section">
-                <h3>⚙️ Panel Administratora</h3>
-                <button class="admin-btn secondary" id="exportBtn">📥 Eksport JSON</button>
-                <button class="admin-btn" id="clearDataBtn">🗑️ Wyczyść dane</button>
-                <button class="admin-btn" id="backAdminBtn">Wróć</button>
+                <div class="form-group">
+                    <label for="materialQty">Ilość:</label>
+                    <input type="number" id="materialQty" min="0" required>
+                </div>
+
+                <button type="submit" class="submit-btn">Dodaj materiał</button>
+            </form>
+
+            <div class="admin-panel">
+                <h4>🔧 Panel Administracyjny</h4>
+                <button id="exportBtn">📥 Eksportuj JSON</button>
+                <button id="clearBtn">🗑️ Wyczyść dane</button>
             </div>
         </div>
     </main>
 
-    <!-- BOTTOM NAVIGATION -->
-    <nav id="bottomNav">
-        <button class="nav-btn active" data-view="listView">
-            <span class="nav-icon">📋</span>
-            <span>Lista</span>
-        </button>
-        <button class="nav-btn" data-view="addView">
-            <span class="nav-icon">➕</span>
-            <span>Dodaj</span>
-        </button>
+    <nav class="bottom-nav">
+        <button id="listBtn" class="active">Lista</button>
+        <button id="addBtn">Dodaj</button>
     </nav>
 
-    <!-- MODALS -->
-    <div id="deleteModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">Potwierdzenie usunięcia</div>
-            <p>Czy na pewno chcesz usunąć ten materiał?</p>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-cancel" id="cancelDeleteBtn">Anuluj</button>
-                <button class="modal-btn modal-delete" id="confirmDeleteBtn">Usuń</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="clearModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">⚠️ Wyczyść wszystkie dane</div>
-            <p>Ta operacja nie może być cofnięta! Wszystkie materiały zostaną usunięte.</p>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-cancel" id="cancelClearBtn">Anuluj</button>
-                <button class="modal-btn modal-delete" id="confirmClearBtn">Usuń wszystko</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- SERVICE WORKER REGISTRATION -->
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(() => {
-                console.log('Service Worker nie jest dostępny');
-            });
-        }
-    </script>
-
-    <!-- APP LOGIC -->
-    <script>
-        // ==================== MAGAZINE CLASS ====================
         class Magazine {
             constructor() {
                 this.materials = this.loadFromStorage();
@@ -730,19 +419,45 @@
                 localStorage.setItem('storageMarMaterials', JSON.stringify(this.materials));
             }
 
-            addMaterial(material) {
-                material.id = Date.now();
-                material.createdAt = new Date().toISOString();
+            addMaterial(name, type, qty) {
+                const unit = type === 'ABS' ? 'mb' : 'szt';
+                const material = {
+                    id: Date.now(),
+                    name,
+                    type,
+                    qty: parseInt(qty),
+                    unit,
+                    createdAt: new Date().toISOString()
+                };
                 this.materials.push(material);
                 this.saveToStorage();
+                return material;
             }
 
-            updateMaterial(id, updates) {
+            getStatus(qty) {
+                if (qty > 20) return 'dobry';
+                if (qty >= 10) return 'niski';
+                return 'krytyczny';
+            }
+
+            quickAddQty(id, amount) {
                 const material = this.materials.find(m => m.id === id);
                 if (material) {
-                    Object.assign(material, updates);
+                    material.qty += parseInt(amount);
                     this.saveToStorage();
+                    return material;
                 }
+                return null;
+            }
+
+            quickRemoveQty(id, amount) {
+                const material = this.materials.find(m => m.id === id);
+                if (material) {
+                    material.qty = Math.max(0, material.qty - parseInt(amount));
+                    this.saveToStorage();
+                    return material;
+                }
+                return null;
             }
 
             deleteMaterial(id) {
@@ -750,165 +465,202 @@
                 this.saveToStorage();
             }
 
-            getMaterial(id) {
-                return this.materials.find(m => m.id === id);
-            }
-
-            getAllMaterials() {
-                return this.materials;
-            }
-
-            searchMaterials(query) {
+            search(query) {
                 const q = query.toLowerCase();
-                return this.materials.filter(m =>
-                    m.name.toLowerCase().includes(q) ||
-                    m.color.toLowerCase().includes(q) ||
-                    m.code.toLowerCase().includes(q)
+                return this.materials.filter(m => 
+                    m.name.toLowerCase().includes(q) || 
+                    m.type.toLowerCase().includes(q)
                 );
             }
 
             filterByStatus(status) {
-                if (!status) return this.materials;
-                return this.materials.filter(m => this.getStatus(m) === status);
-            }
-
-            getStatus(material) {
-                const qty = material.quantity;
-                if (qty > 20) return 'dobry';
-                if (qty >= 10) return 'niski';
-                return 'krytyczny';
-            }
-
-            clearAll() {
-                this.materials = [];
-                this.saveToStorage();
+                return this.materials.filter(m => this.getStatus(m.qty) === status);
             }
 
             exportJSON() {
                 return JSON.stringify(this.materials, null, 2);
             }
+
+            clear() {
+                this.materials = [];
+                this.saveToStorage();
+            }
         }
 
-        // ==================== UI CONTROLLER CLASS ====================
         class UIController {
             constructor() {
                 this.magazine = new Magazine();
-                this.currentView = 'listView';
-                this.deleteModal = document.getElementById('deleteModal');
-                this.clearModal = document.getElementById('clearModal');
-                this.deleteTargetId = null;
+                this.currentFilter = 'all';
+                this.currentSearch = '';
                 this.init();
             }
 
             init() {
                 this.setupEventListeners();
-                this.render();
+                this.renderMaterials();
+                console.log('✅ StolMar Magazyn - załadowano pomyślnie');
             }
 
             setupEventListeners() {
-                // Navigation
-                document.querySelectorAll('[data-view]').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const view = btn.dataset.view;
-                        this.switchView(view);
-                    });
+                document.getElementById('listBtn').addEventListener('click', () => this.switchView('list'));
+                document.getElementById('addBtn').addEventListener('click', () => this.switchView('add'));
+
+                document.getElementById('filterAll').addEventListener('click', () => this.setFilter('all'));
+                document.getElementById('filterGood').addEventListener('click', () => this.setFilter('dobry'));
+                document.getElementById('filterLow').addEventListener('click', () => this.setFilter('niski'));
+                document.getElementById('filterCritical').addEventListener('click', () => this.setFilter('krytyczny'));
+
+                document.getElementById('searchInput').addEventListener('input', (e) => {
+                    this.currentSearch = e.target.value;
+                    this.renderMaterials();
                 });
 
-                // Admin
-                document.getElementById('adminBtn').addEventListener('click', () => {
-                    this.switchView('adminView');
+                document.getElementById('addForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addMaterial();
                 });
 
-                document.getElementById('backAdminBtn').addEventListener('click', () => {
-                    this.switchView('listView');
+                document.getElementById('exportBtn').addEventListener('click', () => this.exportJSON());
+                document.getElementById('clearBtn').addEventListener('click', () => {
+                    if (confirm('⚠️ Czy na pewno chcesz usunąć wszystkie dane?')) {
+                        this.magazine.clear();
+                        this.renderMaterials();
+                        this.showSuccess('✅ Dane zostały wyczyszczone');
+                    }
                 });
-
-                // Form
-                document.getElementById('addForm').addEventListener('submit', (e) => this.handleFormSubmit(e));
-                document.getElementById('cancelBtn').addEventListener('click', () => this.switchView('listView'));
-
-                // Search & Filter
-                document.getElementById('searchInput').addEventListener('input', () => this.render());
-                document.getElementById('statusFilter').addEventListener('change', () => this.render());
-
-                // Admin actions
-                document.getElementById('exportBtn').addEventListener('click', () => this.exportData());
-                document.getElementById('clearDataBtn').addEventListener('click', () => this.openClearModal());
-                document.getElementById('confirmClearBtn').addEventListener('click', () => this.clearAllData());
-                document.getElementById('cancelClearBtn').addEventListener('click', () => this.closeClearModal());
-
-                // Delete modal
-                document.getElementById('confirmDeleteBtn').addEventListener('click', () => this.confirmDelete());
-                document.getElementById('cancelDeleteBtn').addEventListener('click', () => this.closeDeleteModal());
             }
 
-            handleFormSubmit(e) {
-                e.preventDefault();
+            switchView(view) {
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
 
-                const materialType = document.getElementById('materialType').value;
-                const material = {
-                    type: materialType,
-                    name: document.getElementById('materialName').value,
-                    color: document.getElementById('materialColor').value,
-                    code: document.getElementById('materialCode').value || '',
-                    quantity: parseInt(document.getElementById('materialQuantity').value),
-                    unit: materialType === 'ABS' ? 'mb' : 'szt',
-                    notes: document.getElementById('materialNotes').value || ''
-                };
-
-                this.magazine.addMaterial(material);
-                document.getElementById('addForm').reset();
-                this.render();
-                this.switchView('listView');
-            }
-
-            render() {
-                this.renderList();
-            }
-
-            renderList() {
-                const searchQuery = document.getElementById('searchInput').value;
-                const statusFilter = document.getElementById('statusFilter').value;
-
-                let materials = this.magazine.getAllMaterials();
-
-                if (searchQuery) {
-                    materials = this.magazine.searchMaterials(searchQuery);
+                if (view === 'list') {
+                    document.getElementById('listView').classList.add('active');
+                    document.getElementById('listBtn').classList.add('active');
+                    this.renderMaterials();
+                } else {
+                    document.getElementById('addView').classList.add('active');
+                    document.getElementById('addBtn').classList.add('active');
                 }
+            }
 
-                if (statusFilter) {
-                    materials = materials.filter(m => this.magazine.getStatus(m) === statusFilter);
+            setFilter(filter) {
+                this.currentFilter = filter;
+                document.querySelectorAll('header .filters button').forEach(b => b.classList.remove('active'));
+                if (filter === 'all') document.getElementById('filterAll').classList.add('active');
+                else if (filter === 'dobry') document.getElementById('filterGood').classList.add('active');
+                else if (filter === 'niski') document.getElementById('filterLow').classList.add('active');
+                else if (filter === 'krytyczny') document.getElementById('filterCritical').classList.add('active');
+                this.renderMaterials();
+            }
+
+            addMaterial() {
+                const name = document.getElementById('materialName').value;
+                const type = document.getElementById('materialType').value;
+                const qty = document.getElementById('materialQty').value;
+
+                this.magazine.addMaterial(name, type, qty);
+                document.getElementById('addForm').reset();
+                this.showSuccess(`✅ ${name} dodany do magazynu!`);
+                this.renderMaterials();
+                setTimeout(() => this.switchView('list'), 1000);
+            }
+
+            renderMaterials() {
+                let materials = this.magazine.materials;
+
+                if (this.currentSearch) {
+                    materials = this.magazine.search(this.currentSearch);
+                } else if (this.currentFilter !== 'all') {
+                    materials = this.magazine.filterByStatus(this.currentFilter);
                 }
 
                 const container = document.getElementById('materialsList');
 
                 if (materials.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-state-icon">📦</div>
-                            <div class="empty-state-text">Brak materiałów</div>
-                        </div>
-                    `;
+                    container.innerHTML = '<div class="empty-state">📦<p>Brak materiałów</p></div>';
                     return;
                 }
 
-                container.innerHTML = materials.map(material => {
-                    const status = this.magazine.getStatus(material);
-                    const statusEmoji = status === 'dobry' ? '✅' : status === 'niski' ? '⚠️' : '🔴';
-                    const statusText = status === 'dobry' ? 'Dobry' : status === 'niski' ? 'Niski' : 'Krytyczny';
+                container.innerHTML = materials.map(m => {
+                    const status = this.magazine.getStatus(m.qty);
+                    const statusText = status === 'dobry' ? '✅ Dobry' : status === 'niski' ? '⚠️ Niski' : '🔴 Krytyczny';
+                    const statusColor = status === 'dobry' ? '#28a745' : status === 'niski' ? '#ffc107' : '#cc3333';
 
                     return `
                         <div class="material-card ${status}">
-                            <div class="material-header">
-                                <div class="material-info">
-                                    <div class="material-type">${material.type}</div>
-                                    <div class="material-name">${material.name}</div>
-                                    <div class="material-details">
-                                        <div class="material-detail-item">
-                                            <span class="material-detail-label">Kolor:</span>
-                                            <span>${material.color}</span>
-                                        </div>
-                                        ${material.code ? `
-                                            <div class="material-detail-item">
-                                                <span class="material-detail-label">Kod:</span>
-                                                <span>${material.code}</span>
+                            <h3>${m.name}</h3>
+                            <div class="material-info">
+                                <span><strong>Typ:</strong> ${m.type}</span>
+                                <span><strong>Jednostka:</strong> ${m.unit}</span>
+                            </div>
+                            <div class="stock-status">
+                                <span class="status-icon" style="color: ${statusColor};">${statusText}</span>
+                                <span style="color: ${statusColor};"><strong>${m.qty} ${m.unit}</strong></span>
+                            </div>
+
+                            <div class="quick-add-section">
+                                <div class="quick-add-group">
+                                    <label>Dodaj:</label>
+                                    <input type="number" value="75" class="add-input-${m.id}" style="width: 60px;">
+                                    <button class="add-btn-${m.id}">➕ Dodaj</button>
+                                </div>
+                                <div class="quick-add-group">
+                                    <label>Usuń:</label>
+                                    <input type="number" value="1" class="remove-input-${m.id}" style="width: 60px;">
+                                    <button class="remove-btn-${m.id} minus">➖ Usuń</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Attach event listeners to dynamically created buttons
+                materials.forEach(m => {
+                    document.querySelector(`.add-btn-${m.id}`).addEventListener('click', () => {
+                        const qty = parseInt(document.querySelector(`.add-input-${m.id}`).value) || 75;
+                        this.magazine.quickAddQty(m.id, qty);
+                        this.renderMaterials();
+                        this.showSuccess(`✅ Dodano ${qty} ${m.unit} do ${m.name}`);
+                    });
+
+                    document.querySelector(`.remove-btn-${m.id}`).addEventListener('click', () => {
+                        const qty = parseInt(document.querySelector(`.remove-input-${m.id}`).value) || 1;
+                        this.magazine.quickRemoveQty(m.id, qty);
+                        this.renderMaterials();
+                        this.showSuccess(`✅ Usunięto ${qty} ${m.unit} z ${m.name}`);
+                    });
+                });
+            }
+
+            showSuccess(message) {
+                const msg = document.getElementById('successMessage');
+                msg.textContent = message;
+                msg.classList.add('show');
+                setTimeout(() => msg.classList.remove('show'), 3000);
+            }
+
+            exportJSON() {
+                const json = this.magazine.exportJSON();
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'magazyn_export.json';
+                a.click();
+                this.showSuccess('✅ JSON został pobrany!');
+            }
+        }
+
+        // Inicjalizacja
+        const app = new UIController();
+
+        // Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => 
+                console.log('⚠️ Service Worker błąd:', err)
+            );
+        }
+    </script>
+</body>
+</html>
