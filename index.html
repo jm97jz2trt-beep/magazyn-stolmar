@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#1a1a1a">
-    <meta name="description" content="StolMar Magazyn - Aplikacja do zarządzania materiałami Egger">
     <title>StolMar Magazyn</title>
+    <meta name="theme-color" content="#1a1a1a">
+    <meta name="description" content="Responsywny magazyn materiałów Egger">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%231a1a1a' width='180' height='180'/><text x='90' y='120' font-size='80' font-weight='bold' fill='%23cc3333' text-anchor='middle' font-family='Arial'>SM</text></svg>">
     <style>
         * {
             margin: 0;
@@ -15,379 +14,444 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --primary-dark: #1a1a1a;
-            --primary-red: #cc3333;
-            --text-light: #f5f5f5;
-            --text-dark: #333;
-            --border-light: #333;
-            --bg-light: #f9f9f9;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --text-light: #f5f5f5;
-                --text-dark: #333;
-                --border-light: #444;
-                --bg-light: #2a2a2a;
-            }
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            overflow: hidden;
-        }
-
         body {
-            display: flex;
-            flex-direction: column;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
         }
 
         /* HEADER */
-        .header {
-            background-color: var(--primary-dark);
-            color: var(--text-light);
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        #header {
             position: sticky;
             top: 0;
+            background-color: #1a1a1a;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             z-index: 1000;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-
-        .logo {
+        #header img {
             height: 40px;
-            width: auto;
-            max-width: 120px;
             object-fit: contain;
         }
 
-        .header-title {
+        #header h1 {
             font-size: 18px;
             font-weight: 600;
-            letter-spacing: 1px;
+            flex: 1;
+            text-align: center;
+            margin: 0 20px;
         }
 
-        .header-actions {
+        .header-right {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             align-items: center;
         }
 
         .header-btn {
-            background-color: var(--primary-red);
+            background-color: #cc3333;
             color: white;
             border: none;
             padding: 8px 12px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            white-space: nowrap;
+            font-size: 12px;
+            transition: background-color 0.3s;
         }
 
         .header-btn:hover {
-            background-color: #b82a2a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(204, 51, 51, 0.3);
-        }
-
-        .header-btn:active {
-            transform: translateY(0);
+            background-color: #aa2222;
         }
 
         /* MAIN CONTENT */
-        .container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
+        #mainContent {
+            padding-bottom: 80px;
+            padding-top: 20px;
         }
 
         .view {
             display: none;
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            animation: fadeIn 0.3s ease;
         }
 
         .view.active {
+            display: block;
+        }
+
+        /* LISTA MATERIAŁÓW */
+        .search-bar {
+            margin: 0 20px 20px;
             display: flex;
-            flex-direction: column;
+            gap: 10px;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* SEARCH BAR */
-        .search-container {
-            margin-bottom: 16px;
-            display: flex;
-            gap: 8px;
-        }
-
-        .search-input {
+        .search-bar input {
             flex: 1;
-            padding: 10px 12px;
-            border: 1px solid var(--border-light);
-            border-radius: 6px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             font-size: 14px;
-            background-color: white;
-            color: var(--text-dark);
-            transition: border-color 0.2s;
         }
 
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary-red);
-            box-shadow: 0 0 6px rgba(204, 51, 51, 0.2);
+        .search-bar select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
         }
 
-        .filter-btn {
-            background-color: var(--primary-red);
-            color: white;
-            border: none;
-            padding: 10px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .filter-btn:hover {
-            background-color: #b82a2a;
-        }
-
-        /* MATERIAL CARDS */
         .materials-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 12px;
-            flex: 1;
-            overflow-y: auto;
+            margin: 0 20px;
         }
 
         .material-card {
             background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 14px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            border-left: 4px solid #999;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
         }
 
         .material-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
 
-        .material-card.critical {
-            border-left: 4px solid #ff4444;
+        .material-card.dobry {
+            border-left-color: #28a745;
+            background-color: #f0f9f6;
+        }
+
+        .material-card.niski {
+            border-left-color: #ffc107;
+            background-color: #fffaf0;
+        }
+
+        .material-card.krytyczny {
+            border-left-color: #cc3333;
             background-color: #fff5f5;
         }
 
-        .material-card.low {
-            border-left: 4px solid #ffb347;
-            background-color: #fff9f0;
-        }
-
-        .material-card.good {
-            border-left: 4px solid #4caf50;
-            background-color: #f5fff5;
-        }
-
-        .card-header {
+        .material-header {
             display: flex;
             justify-content: space-between;
-            align-items: start;
-            margin-bottom: 8px;
+            align-items: flex-start;
+            margin-bottom: 10px;
         }
 
-        .card-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-dark);
-            word-break: break-word;
+        .material-info {
             flex: 1;
+        }
+
+        .material-type {
+            display: inline-block;
+            background-color: #333;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .material-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .material-details {
+            display: flex;
+            gap: 15px;
+            margin: 8px 0;
+            font-size: 13px;
+            color: #666;
+            flex-wrap: wrap;
+        }
+
+        .material-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .material-detail-label {
+            font-weight: 600;
+            color: #333;
         }
 
         .status-badge {
             display: inline-block;
             padding: 4px 8px;
-            border-radius: 4px;
+            border-radius: 3px;
             font-size: 12px;
-            font-weight: 600;
-            white-space: nowrap;
-            margin-left: 8px;
+            font-weight: bold;
         }
 
-        .status-badge.good {
-            background-color: #4caf50;
+        .status-dobry {
+            background-color: #28a745;
             color: white;
         }
 
-        .status-badge.low {
-            background-color: #ffb347;
+        .status-niski {
+            background-color: #ffc107;
             color: #333;
         }
 
-        .status-badge.critical {
-            background-color: #ff4444;
+        .status-krytyczny {
+            background-color: #cc3333;
             color: white;
         }
 
-        .card-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
+        .material-qty {
+            text-align: right;
         }
 
-        .quantity-display {
+        .qty-value {
             font-size: 24px;
-            font-weight: 800;
-            color: var(--primary-red);
+            font-weight: bold;
+            color: #1a1a1a;
+            margin: 5px 0;
         }
 
-        .quantity-unit {
+        .qty-unit {
             font-size: 12px;
-            color: #666;
-            margin-top: 2px;
+            color: #999;
         }
 
-        .card-buttons {
+        .qty-controls {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             margin-top: 10px;
         }
 
         .qty-btn {
-            flex: 1;
-            padding: 8px 6px;
-            border: 1px solid var(--primary-red);
-            background: white;
-            color: var(--primary-red);
-            border-radius: 4px;
+            background-color: #cc3333;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 12px;
-            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.2s;
         }
 
         .qty-btn:hover {
-            background-color: var(--primary-red);
-            color: white;
+            background-color: #aa2222;
         }
 
-        .delete-btn {
-            padding: 8px 10px;
-            background-color: #ff6666;
-            color: white;
+        .qty-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .material-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px;
             border: none;
-            border-radius: 4px;
+            border-radius: 3px;
             cursor: pointer;
             font-size: 12px;
             font-weight: 600;
-            transition: all 0.2s;
+            transition: background-color 0.2s;
+        }
+
+        .edit-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .delete-btn {
+            background-color: #cc3333;
+            color: white;
         }
 
         .delete-btn:hover {
-            background-color: #ff4444;
+            background-color: #aa2222;
         }
 
-        /* FORM */
-        .form-container {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            max-width: 600px;
+        /* FORMULARZ */
+        #addView {
+            max-width: 500px;
             margin: 0 auto;
-            width: 100%;
-            max-height: 70vh;
-            overflow-y: auto;
         }
 
         .form-group {
-            margin-bottom: 16px;
+            margin: 0 20px 20px;
             display: flex;
             flex-direction: column;
         }
 
         .form-group label {
             font-weight: 600;
-            margin-bottom: 6px;
-            color: var(--text-dark);
-            font-size: 14px;
+            margin-bottom: 8px;
+            color: #333;
         }
 
         .form-group input,
-        .form-group select {
-            padding: 10px 12px;
-            border: 1px solid var(--border-light);
-            border-radius: 6px;
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             font-size: 14px;
-            background-color: white;
-            color: var(--text-dark);
-            transition: border-color 0.2s;
+            font-family: inherit;
         }
 
         .form-group input:focus,
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
-            border-color: var(--primary-red);
-            box-shadow: 0 0 6px rgba(204, 51, 51, 0.2);
+            border-color: #cc3333;
+            box-shadow: 0 0 0 3px rgba(204, 51, 51, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 0 20px 20px;
+        }
+
+        .form-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         .submit-btn {
-            background-color: var(--primary-red);
+            background-color: #28a745;
             color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 15px;
-            transition: all 0.2s;
-            width: 100%;
-            margin-top: 10px;
         }
 
         .submit-btn:hover {
-            background-color: #b82a2a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(204, 51, 51, 0.3);
+            background-color: #218838;
+        }
+
+        .cancel-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .cancel-btn:hover {
+            background-color: #5a6268;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .modal-confirm {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .modal-confirm:hover {
+            background-color: #218838;
+        }
+
+        .modal-cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .modal-cancel:hover {
+            background-color: #5a6268;
+        }
+
+        .modal-delete {
+            background-color: #cc3333;
+            color: white;
+        }
+
+        .modal-delete:hover {
+            background-color: #aa2222;
         }
 
         /* BOTTOM NAVIGATION */
-        .bottom-nav {
-            background-color: var(--primary-dark);
-            border-top: 1px solid var(--border-light);
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0;
-            position: sticky;
+        #bottomNav {
+            position: fixed;
             bottom: 0;
-            z-index: 999;
+            left: 0;
+            right: 0;
+            background-color: #1a1a1a;
+            display: flex;
+            border-top: 1px solid #333;
+            z-index: 1000;
         }
 
         .nav-btn {
@@ -399,19 +463,16 @@
             cursor: pointer;
             font-size: 12px;
             font-weight: 600;
-            transition: all 0.2s;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 4px;
+            transition: color 0.3s;
         }
 
         .nav-btn.active {
-            color: var(--primary-red);
-        }
-
-        .nav-btn:hover {
-            color: var(--primary-red);
+            color: #cc3333;
+            border-top: 3px solid #cc3333;
         }
 
         .nav-icon {
@@ -421,623 +482,533 @@
         /* EMPTY STATE */
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
             color: #999;
         }
 
         .empty-state-icon {
             font-size: 48px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-text {
+            font-size: 16px;
+            margin-bottom: 20px;
         }
 
         /* ADMIN PANEL */
-        .admin-panel {
+        .admin-section {
+            margin: 20px;
             background: white;
-            border-radius: 8px;
             padding: 20px;
-            max-width: 500px;
-            margin: 0 auto;
-            width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .admin-section h3 {
+            margin-bottom: 15px;
+            color: #1a1a1a;
+            font-size: 16px;
         }
 
         .admin-btn {
+            display: block;
             width: 100%;
             padding: 12px;
             margin-bottom: 10px;
+            background-color: #cc3333;
+            color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.2s;
-            font-size: 14px;
+            transition: background-color 0.3s;
         }
 
-        .admin-btn-export {
-            background-color: #4caf50;
-            color: white;
+        .admin-btn:hover {
+            background-color: #aa2222;
         }
 
-        .admin-btn-export:hover {
-            background-color: #45a049;
+        .admin-btn.secondary {
+            background-color: #007bff;
         }
 
-        .admin-btn-clear {
-            background-color: #ff6666;
-            color: white;
-        }
-
-        .admin-btn-clear:hover {
-            background-color: #ff4444;
-        }
-
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal.active {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 24px;
-            border-radius: 8px;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-        }
-
-        .modal-header {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: var(--text-dark);
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .modal-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .modal-btn-cancel {
-            background-color: #e0e0e0;
-            color: var(--text-dark);
-        }
-
-        .modal-btn-cancel:hover {
-            background-color: #d0d0d0;
-        }
-
-        .modal-btn-confirm {
-            background-color: var(--primary-red);
-            color: white;
-        }
-
-        .modal-btn-confirm:hover {
-            background-color: #b82a2a;
+        .admin-btn.secondary:hover {
+            background-color: #0056b3;
         }
 
         /* RESPONSIVE */
         @media (max-width: 600px) {
-            .header {
-                padding: 10px 12px;
-            }
-
-            .header-title {
+            #header h1 {
                 font-size: 16px;
             }
 
-            .header-btn {
-                padding: 6px 10px;
-                font-size: 12px;
+            .material-header {
+                flex-direction: column;
             }
 
-            .materials-list {
-                grid-template-columns: 1fr;
+            .qty-controls {
+                width: 100%;
             }
 
-            .logo {
-                height: 35px;
+            .qty-btn {
+                flex: 1;
             }
-        }
-
-        /* SCROLLBAR */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-red);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #b82a2a;
         }
     </style>
 </head>
 <body>
     <!-- HEADER -->
-    <div class="header">
-        <div class="header-left">
-            <img src="1STOL MAR LOGO CZARN copy.png" alt="StolMar Design Logo" class="logo">
-            <div class="header-title">StolMar Magazyn</div>
-        </div>
-        <div class="header-actions">
+    <header id="header">
+        <img src="1STOL MAR LOGO CZARN copy.png" alt="StolMar Logo">
+        <h1>Magazyn</h1>
+        <div class="header-right">
             <button class="header-btn" id="adminBtn">Admin</button>
-            <button class="header-btn" id="syncBtn">Synchronizuj</button>
         </div>
-    </div>
+    </header>
 
-    <!-- MAIN CONTAINER -->
-    <div class="container">
-        <!-- LISTA VIEW -->
-        <div class="view active" id="listView">
-            <div class="search-container">
-                <input 
-                    type="text" 
-                    class="search-input" 
-                    id="searchInput" 
-                    placeholder="Szukaj materiału..."
-                >
-                <button class="filter-btn" id="filterBtn">🔽 Filtr</button>
+    <!-- MAIN CONTENT -->
+    <main id="mainContent">
+        <!-- LIST VIEW -->
+        <div id="listView" class="view active">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Szukaj materiału...">
+                <select id="statusFilter">
+                    <option value="">Wszystkie</option>
+                    <option value="dobry">✅ Dobry</option>
+                    <option value="niski">⚠️ Niski</option>
+                    <option value="krytyczny">🔴 Krytyczny</option>
+                </select>
             </div>
-            <div class="materials-list" id="materialsList"></div>
-            <div class="empty-state" id="emptyState" style="display: none;">
-                <div class="empty-state-icon">📦</div>
-                <p>Brak materiałów. Dodaj pierwszy materiał!</p>
+            <div class="materials-list" id="materialsList">
+                <!-- Materiały będą tutaj renderowane -->
             </div>
         </div>
 
-        <!-- DODAJ VIEW -->
-        <div class="view" id="addView">
-            <div class="form-container">
-                <h2 style="margin-bottom: 20px; color: var(--text-dark);">Dodaj Nowy Materiał</h2>
-                <form id="addForm">
-                    <div class="form-group">
-                        <label for="materialType">Typ Materiału *</label>
-                        <select id="materialType" required>
-                            <option value="">-- Wybierz --</option>
-                            <option value="ABS">ABS</option>
-                            <option value="Płyty">Płyty</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="materialName">Nazwa Materiału *</label>
-                        <input type="text" id="materialName" placeholder="np. ABS Biały" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="materialColor">Kolor *</label>
-                        <input type="text" id="materialColor" placeholder="np. Biały" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="materialCode">Kod/SKU (opcjonalnie)</label>
-                        <input type="text" id="materialCode" placeholder="np. ABS-001">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="materialQuantity">Ilość *</label>
-                        <input type="number" id="materialQuantity" placeholder="0" min="0" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="materialUnit">Jednostka *</label>
-                        <select id="materialUnit" required>
-                            <option value="">-- Wybierz --</option>
-                            <option value="mb">mb (metry bieżące)</option>
-                            <option value="szt">szt (sztuki)</option>
-                            <option value="kg">kg (kilogramy)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="materialNotes">Uwagi (opcjonalnie)</label>
-                        <input type="text" id="materialNotes" placeholder="np. Stan: świeży...">
-                    </div>
-
-                    <button type="submit" class="submit-btn">➕ Dodaj Materiał</button>
-                </form>
-            </div>
+        <!-- ADD VIEW -->
+        <div id="addView" class="view">
+            <form id="addForm">
+                <div class="form-group">
+                    <label for="materialType">Typ materiału *</label>
+                    <select id="materialType" required>
+                        <option value="">-- Wybierz --</option>
+                        <option value="ABS">ABS</option>
+                        <option value="Płyty">Płyty</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="materialName">Nazwa *</label>
+                    <input type="text" id="materialName" required>
+                </div>
+                <div class="form-group">
+                    <label for="materialColor">Kolor *</label>
+                    <input type="text" id="materialColor" required>
+                </div>
+                <div class="form-group">
+                    <label for="materialCode">Kod artykułu</label>
+                    <input type="text" id="materialCode">
+                </div>
+                <div class="form-group">
+                    <label for="materialQuantity">Ilość *</label>
+                    <input type="number" id="materialQuantity" required min="0">
+                </div>
+                <div class="form-group">
+                    <label for="materialNotes">Notatki</label>
+                    <textarea id="materialNotes"></textarea>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="submit-btn">Dodaj</button>
+                    <button type="button" class="cancel-btn" id="cancelBtn">Anuluj</button>
+                </div>
+            </form>
         </div>
 
         <!-- ADMIN VIEW -->
-        <div class="view" id="adminView">
-            <div class="admin-panel">
-                <h2 style="margin-bottom: 20px; color: var(--text-dark);">Panel Administratora</h2>
-                <button class="admin-btn admin-btn-export" id="exportBtn">📥 Eksportuj JSON</button>
-                <button class="admin-btn admin-btn-clear" id="clearBtn">🗑️ Wyczyść Wszystkie Dane</button>
-                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
-                    <p style="font-size: 12px; color: #999; text-align: center;">v1.0.0 | PWA | StolMar Design</p>
-                </div>
+        <div id="adminView" class="view">
+            <div class="admin-section">
+                <h3>⚙️ Panel Administratora</h3>
+                <button class="admin-btn secondary" id="exportBtn">📥 Eksport JSON</button>
+                <button class="admin-btn" id="clearDataBtn">🗑️ Wyczyść dane</button>
+                <button class="admin-btn" id="backAdminBtn">Wróć</button>
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- BOTTOM NAVIGATION -->
-    <div class="bottom-nav">
-        <button class="nav-btn active" id="navLista">
+    <nav id="bottomNav">
+        <button class="nav-btn active" data-view="listView">
             <span class="nav-icon">📋</span>
             <span>Lista</span>
         </button>
-        <button class="nav-btn" id="navDodaj">
+        <button class="nav-btn" data-view="addView">
             <span class="nav-icon">➕</span>
             <span>Dodaj</span>
         </button>
-    </div>
+    </nav>
 
-    <!-- MODAL -->
-    <div class="modal" id="confirmModal">
+    <!-- MODALS -->
+    <div id="deleteModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header" id="modalTitle">Potwierdzenie</div>
-            <p id="modalMessage">Czy na pewno?</p>
+            <div class="modal-header">Potwierdzenie usunięcia</div>
+            <p>Czy na pewno chcesz usunąć ten materiał?</p>
             <div class="modal-buttons">
-                <button class="modal-btn modal-btn-cancel" id="modalCancel">Anuluj</button>
-                <button class="modal-btn modal-btn-confirm" id="modalConfirm">Potwierdź</button>
+                <button class="modal-btn modal-cancel" id="cancelDeleteBtn">Anuluj</button>
+                <button class="modal-btn modal-delete" id="confirmDeleteBtn">Usuń</button>
             </div>
         </div>
     </div>
 
+    <div id="clearModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">⚠️ Wyczyść wszystkie dane</div>
+            <p>Ta operacja nie może być cofnięta! Wszystkie materiały zostaną usunięte.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-cancel" id="cancelClearBtn">Anuluj</button>
+                <button class="modal-btn modal-delete" id="confirmClearBtn">Usuń wszystko</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SERVICE WORKER REGISTRATION -->
     <script>
-        // ==================== STORAGE ====================
-        const STORAGE_KEY = 'storageMarMaterials';
-
-        function getStorageData() {
-            try {
-                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-            } catch (e) {
-                console.error('Błąd parsowania storage:', e);
-                return [];
-            }
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {
+                console.log('Service Worker nie jest dostępny');
+            });
         }
+    </script>
 
-        function setStorageData(data) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        }
-
+    <!-- APP LOGIC -->
+    <script>
         // ==================== MAGAZINE CLASS ====================
         class Magazine {
             constructor() {
-                this.materials = getStorageData();
+                this.materials = this.loadFromStorage();
+            }
+
+            loadFromStorage() {
+                const stored = localStorage.getItem('storageMarMaterials');
+                return stored ? JSON.parse(stored) : [];
+            }
+
+            saveToStorage() {
+                localStorage.setItem('storageMarMaterials', JSON.stringify(this.materials));
             }
 
             addMaterial(material) {
-                material.id = Date.now().toString();
-                material.dateAdded = new Date().toISOString();
+                material.id = Date.now();
+                material.createdAt = new Date().toISOString();
                 this.materials.push(material);
-                this.save();
-                return material;
+                this.saveToStorage();
             }
 
-            removeMaterial(id) {
-                this.materials = this.materials.filter(m => m.id !== id);
-                this.save();
-            }
-
-            updateQuantity(id, newQuantity) {
+            updateMaterial(id, updates) {
                 const material = this.materials.find(m => m.id === id);
                 if (material) {
-                    material.quantity = Math.max(0, newQuantity);
-                    material.lastUpdated = new Date().toISOString();
-                    this.save();
+                    Object.assign(material, updates);
+                    this.saveToStorage();
                 }
             }
 
-            search(query) {
-                if (!query) return this.materials;
+            deleteMaterial(id) {
+                this.materials = this.materials.filter(m => m.id !== id);
+                this.saveToStorage();
+            }
+
+            getMaterial(id) {
+                return this.materials.find(m => m.id === id);
+            }
+
+            getAllMaterials() {
+                return this.materials;
+            }
+
+            searchMaterials(query) {
                 const q = query.toLowerCase();
                 return this.materials.filter(m =>
                     m.name.toLowerCase().includes(q) ||
                     m.color.toLowerCase().includes(q) ||
-                    m.code.toLowerCase().includes(q) ||
-                    m.type.toLowerCase().includes(q)
+                    m.code.toLowerCase().includes(q)
                 );
             }
 
-            getByStatus(status) {
-                if (status === 'good') return this.materials.filter(m => m.quantity > 20);
-                if (status === 'low') return this.materials.filter(m => m.quantity >= 10 && m.quantity <= 20);
-                if (status === 'critical') return this.materials.filter(m => m.quantity < 10);
-                return this.materials;
+            filterByStatus(status) {
+                if (!status) return this.materials;
+                return this.materials.filter(m => this.getStatus(m) === status);
             }
 
-            save() {
-                setStorageData(this.materials);
+            getStatus(material) {
+                const qty = material.quantity;
+                if (qty > 20) return 'dobry';
+                if (qty >= 10) return 'niski';
+                return 'krytyczny';
             }
 
-            export() {
-                return JSON.stringify(this.materials, null, 2);
-            }
-
-            import(jsonData) {
-                try {
-                    this.materials = JSON.parse(jsonData);
-                    this.save();
-                    return true;
-                } catch (e) {
-                    return false;
-                }
-            }
-
-            clear() {
+            clearAll() {
                 this.materials = [];
-                this.save();
+                this.saveToStorage();
+            }
+
+            exportJSON() {
+                return JSON.stringify(this.materials, null, 2);
             }
         }
 
-        // ==================== UI CONTROLLER ====================
+        // ==================== UI CONTROLLER CLASS ====================
         class UIController {
-            constructor(magazine) {
-                this.magazine = magazine;
-                this.currentFilter = null;
-                this.initEventListeners();
+            constructor() {
+                this.magazine = new Magazine();
+                this.currentView = 'listView';
+                this.deleteModal = document.getElementById('deleteModal');
+                this.clearModal = document.getElementById('clearModal');
+                this.deleteTargetId = null;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
                 this.render();
             }
 
-            initEventListeners() {
+            setupEventListeners() {
                 // Navigation
-                document.getElementById('navLista').addEventListener('click', () => this.switchView('list'));
-                document.getElementById('navDodaj').addEventListener('click', () => this.switchView('add'));
-
-                // Search & Filter
-                document.getElementById('searchInput').addEventListener('input', (e) => {
-                    this.renderMaterials(this.magazine.search(e.target.value));
+                document.querySelectorAll('[data-view]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const view = btn.dataset.view;
+                        this.switchView(view);
+                    });
                 });
 
-                document.getElementById('filterBtn').addEventListener('click', () => this.showFilterMenu());
+                // Admin
+                document.getElementById('adminBtn').addEventListener('click', () => {
+                    this.switchView('adminView');
+                });
+
+                document.getElementById('backAdminBtn').addEventListener('click', () => {
+                    this.switchView('listView');
+                });
 
                 // Form
                 document.getElementById('addForm').addEventListener('submit', (e) => this.handleFormSubmit(e));
+                document.getElementById('cancelBtn').addEventListener('click', () => this.switchView('listView'));
 
-                // Admin
-                document.getElementById('adminBtn').addEventListener('click', () => this.switchView('admin'));
-                document.getElementById('exportBtn').addEventListener('click', () => this.handleExport());
-                document.getElementById('clearBtn').addEventListener('click', () => this.showConfirmModal(
-                    'Wyczyść dane',
-                    'Czy na pewno chcesz usunąć WSZYSTKIE materiały? Tej operacji nie można cofnąć!',
-                    () => this.handleClear()
-                ));
+                // Search & Filter
+                document.getElementById('searchInput').addEventListener('input', () => this.render());
+                document.getElementById('statusFilter').addEventListener('change', () => this.render());
 
-                // Sync
-                document.getElementById('syncBtn').addEventListener('click', () => this.handleSync());
+                // Admin actions
+                document.getElementById('exportBtn').addEventListener('click', () => this.exportData());
+                document.getElementById('clearDataBtn').addEventListener('click', () => this.openClearModal());
+                document.getElementById('confirmClearBtn').addEventListener('click', () => this.clearAllData());
+                document.getElementById('cancelClearBtn').addEventListener('click', () => this.closeClearModal());
 
-                // Modal
-                document.getElementById('modalCancel').addEventListener('click', () => this.hideConfirmModal());
-                document.getElementById('modalConfirm').addEventListener('click', () => {
-                    if (this.confirmCallback) this.confirmCallback();
-                    this.hideConfirmModal();
-                });
-            }
-
-            switchView(view) {
-                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-
-                if (view === 'list') {
-                    document.getElementById('listView').classList.add('active');
-                    document.getElementById('navLista').classList.add('active');
-                } else if (view === 'add') {
-                    document.getElementById('addView').classList.add('active');
-                    document.getElementById('navDodaj').classList.add('active');
-                } else if (view === 'admin') {
-                    document.getElementById('adminView').classList.add('active');
-                }
-
-                // Reset search when switching
-                document.getElementById('searchInput').value = '';
-                this.currentFilter = null;
-            }
-
-            renderMaterials(materials = this.magazine.materials) {
-                const container = document.getElementById('materialsList');
-                const empty = document.getElementById('emptyState');
-
-                if (materials.length === 0) {
-                    container.innerHTML = '';
-                    empty.style.display = 'flex';
-                    empty.style.flexDirection = 'column';
-                    empty.style.justifyContent = 'center';
-                    empty.style.alignItems = 'center';
-                    empty.style.height = '200px';
-                    return;
-                }
-
-                empty.style.display = 'none';
-                container.innerHTML = materials.map(m => this.createMaterialCard(m)).join('');
-
-                // Event listeners for cards
-                materials.forEach(m => {
-                    const card = container.querySelector(`[data-id="${m.id}"]`);
-                    if (card) {
-                        card.querySelector('.qty-btn:nth-child(1)').addEventListener('click', () => {
-                            this.magazine.updateQuantity(m.id, m.quantity - 1);
-                            this.render();
-                        });
-                        card.querySelector('.qty-btn:nth-child(2)').addEventListener('click', () => {
-                            this.magazine.updateQuantity(m.id, m.quantity + 1);
-                            this.render();
-                        });
-                        card.querySelector('.delete-btn').addEventListener('click', () => {
-                            this.showConfirmModal(
-                                'Usuń materiał',
-                                `Czy na pewno chcesz usunąć ${m.name}?`,
-                                () => {
-                                    this.magazine.removeMaterial(m.id);
-                                    this.render();
-                                }
-                            );
-                        });
-                    }
-                });
-            }
-
-            createMaterialCard(material) {
-                const status = this.getStatus(material.quantity);
-                const statusIcon = status === 'good' ? '✅' : status === 'low' ? '⚠️' : '🔴';
-
-                return `
-                    <div class="material-card ${status}" data-id="${material.id}">
-                        <div class="card-header">
-                            <div class="card-title">${material.name}</div>
-                            <span class="status-badge ${status}">${statusIcon} ${this.getStatusText(status)}</span>
-                        </div>
-                        <div style="font-size: 12px; color: #666; margin-bottom: 8px;">
-                            ${material.color} • ${material.code || 'Brak kodu'}
-                        </div>
-                        <div class="card-content">
-                            <div>
-                                <div class="quantity-display">${material.quantity}</div>
-                                <div class="quantity-unit">${material.unit}</div>
-                            </div>
-                        </div>
-                        <div class="card-buttons">
-                            <button class="qty-btn">➖ Zmniejsz</button>
-                            <button class="qty-btn">➕ Zwiększ</button>
-                            <button class="delete-btn">🗑️</button>
-                        </div>
-                    </div>
-                `;
-            }
-
-            getStatus(quantity) {
-                if (quantity > 20) return 'good';
-                if (quantity >= 10 && quantity <= 20) return 'low';
-                return 'critical';
-            }
-
-            getStatusText(status) {
-                if (status === 'good') return 'Dobry';
-                if (status === 'low') return 'Niski';
-                return 'Krytyczny';
+                // Delete modal
+                document.getElementById('confirmDeleteBtn').addEventListener('click', () => this.confirmDelete());
+                document.getElementById('cancelDeleteBtn').addEventListener('click', () => this.closeDeleteModal());
             }
 
             handleFormSubmit(e) {
                 e.preventDefault();
 
+                const materialType = document.getElementById('materialType').value;
                 const material = {
-                    type: document.getElementById('materialType').value,
+                    type: materialType,
                     name: document.getElementById('materialName').value,
                     color: document.getElementById('materialColor').value,
                     code: document.getElementById('materialCode').value || '',
                     quantity: parseInt(document.getElementById('materialQuantity').value),
-                    unit: document.getElementById('materialUnit').value,
+                    unit: materialType === 'ABS' ? 'mb' : 'szt', // ✅ AUTOMATYCZNE USTAWIENIE
                     notes: document.getElementById('materialNotes').value || ''
                 };
 
                 this.magazine.addMaterial(material);
                 document.getElementById('addForm').reset();
                 this.render();
-                this.switchView('list');
+                this.switchView('listView');
             }
 
-            handleExport() {
-                const json = this.magazine.export();
+            render() {
+                this.renderList();
+            }
+
+            renderList() {
+                const searchQuery = document.getElementById('searchInput').value;
+                const statusFilter = document.getElementById('statusFilter').value;
+
+                let materials = this.magazine.getAllMaterials();
+
+                if (searchQuery) {
+                    materials = this.magazine.searchMaterials(searchQuery);
+                }
+
+                if (statusFilter) {
+                    materials = materials.filter(m => this.magazine.getStatus(m) === statusFilter);
+                }
+
+                const container = document.getElementById('materialsList');
+
+                if (materials.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📦</div>
+                            <div class="empty-state-text">Brak materiałów</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = materials.map(material => {
+                    const status = this.magazine.getStatus(material);
+                    const statusEmoji = status === 'dobry' ? '✅' : status === 'niski' ? '⚠️' : '🔴';
+                    const statusText = status === 'dobry' ? 'Dobry' : status === 'niski' ? 'Niski' : 'Krytyczny';
+
+                    return `
+                        <div class="material-card ${status}">
+                            <div class="material-header">
+                                <div class="material-info">
+                                    <div class="material-type">${material.type}</div>
+                                    <div class="material-name">${material.name}</div>
+                                    <div class="material-details">
+                                        <div class="material-detail-item">
+                                            <span class="material-detail-label">Kolor:</span>
+                                            <span>${material.color}</span>
+                                        </div>
+                                        ${material.code ? `
+                                            <div class="material-detail-item">
+                                                <span class="material-detail-label">Kod:</span>
+                                                <span>${material.code}</span>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                    ${material.notes ? `
+                                        <div class="material-details" style="margin-top: 10px;">
+                                            <small>📝 ${material.notes}</small>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                <div class="material-qty">
+                                    <div class="qty-value">${material.quantity}</div>
+                                    <div class="qty-unit">${material.unit}</div>
+                                    <div class="status-badge status-${status}">${statusEmoji} ${statusText}</div>
+                                </div>
+                            </div>
+                            <div class="qty-controls">
+                                <button class="qty-btn" onclick="uiController.changeMaterialQty(${material.id}, -1)">➖</button>
+                                <button class="qty-btn" onclick="uiController.changeMaterialQty(${material.id}, 1)">➕</button>
+                            </div>
+                            <div class="material-actions">
+                                <button class="action-btn edit-btn" onclick="uiController.editMaterial(${material.id})">Edytuj</button>
+                                <button class="action-btn delete-btn" onclick="uiController.openDeleteModal(${material.id})">Usuń</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            switchView(viewName) {
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.getElementById(viewName).classList.add('active');
+
+                document.querySelectorAll('[data-view]').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.view === viewName) {
+                        btn.classList.add('active');
+                    }
+                });
+
+                this.currentView = viewName;
+            }
+
+            changeMaterialQty(id, change) {
+                const material = this.magazine.getMaterial(id);
+                if (material) {
+                    const newQty = Math.max(0, material.quantity + change);
+                    this.magazine.updateMaterial(id, { quantity: newQty });
+                    this.render();
+                }
+            }
+
+            editMaterial(id) {
+                const material = this.magazine.getMaterial(id);
+                if (material) {
+                    document.getElementById('materialType').value = material.type;
+                    document.getElementById('materialName').value = material.name;
+                    document.getElementById('materialColor').value = material.color;
+                    document.getElementById('materialCode').value = material.code;
+                    document.getElementById('materialQuantity').value = material.quantity;
+                    document.getElementById('materialNotes').value = material.notes;
+
+                    const form = document.getElementById('addForm');
+                    const oldSubmit = form.onsubmit;
+                    form.onsubmit = (e) => {
+                        e.preventDefault();
+                        const updated = {
+                            type: document.getElementById('materialType').value,
+                            name: document.getElementById('materialName').value,
+                            color: document.getElementById('materialColor').value,
+                            code: document.getElementById('materialCode').value || '',
+                            quantity: parseInt(document.getElementById('materialQuantity').value),
+                            unit: document.getElementById('materialType').value === 'ABS' ? 'mb' : 'szt',
+                            notes: document.getElementById('materialNotes').value || ''
+                        };
+                        this.magazine.updateMaterial(id, updated);
+                        form.onsubmit = oldSubmit;
+                        form.reset();
+                        this.render();
+                        this.switchView('listView');
+                    };
+
+                    this.switchView('addView');
+                }
+            }
+
+            openDeleteModal(id) {
+                this.deleteTargetId = id;
+                this.deleteModal.classList.add('active');
+            }
+
+            closeDeleteModal() {
+                this.deleteModal.classList.remove('active');
+                this.deleteTargetId = null;
+            }
+
+            confirmDelete() {
+                if (this.deleteTargetId) {
+                    this.magazine.deleteMaterial(this.deleteTargetId);
+                    this.render();
+                }
+                this.closeDeleteModal();
+            }
+
+            openClearModal() {
+                this.clearModal.classList.add('active');
+            }
+
+            closeClearModal() {
+                this.clearModal.classList.remove('active');
+            }
+
+            clearAllData() {
+                this.magazine.clearAll();
+                this.render();
+                this.closeClearModal();
+                this.switchView('listView');
+            }
+
+            exportData() {
+                const json = this.magazine.exportJSON();
                 const blob = new Blob([json], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = `magazyn-${new Date().toISOString().split('T')[0]}.json`;
                 a.click();
-            }
-
-            handleClear() {
-                this.magazine.clear();
-                this.render();
-                this.switchView('list');
-            }
-
-            handleSync() {
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.ready.then(() => {
-                        alert('✅ Aplikacja jest zsynchronizowana!');
-                    });
-                }
-            }
-
-            showFilterMenu() {
-                const menu = prompt('Wybierz filtr:\n1 = Dobry (>20)\n2 = Niski (10-20)\n3 = Krytyczny (<10)\n0 = Bez filtru');
-                if (menu === '1') {
-                    this.currentFilter = 'good';
-                    this.renderMaterials(this.magazine.getByStatus('good'));
-                } else if (menu === '2') {
-                    this.currentFilter = 'low';
-                    this.renderMaterials(this.magazine.getByStatus('low'));
-                } else if (menu === '3') {
-                    this.currentFilter = 'critical';
-                    this.renderMaterials(this.magazine.getByStatus('critical'));
-                } else {
-                    this.currentFilter = null;
-                    this.render();
-                }
-            }
-
-            showConfirmModal(title, message, callback) {
-                document.getElementById('modalTitle').textContent = title;
-                document.getElementById('modalMessage').textContent = message;
-                document.getElementById('confirmModal').classList.add('active');
-                this.confirmCallback = callback;
-            }
-
-            hideConfirmModal() {
-                document.getElementById('confirmModal').classList.remove('active');
-                this.confirmCallback = null;
-            }
-
-            render() {
-                this.renderMaterials();
+                URL.revokeObjectURL(url);
             }
         }
 
-        // ==================== INITIALIZATION ====================
-        window.addEventListener('load', () => {
-            const magazine = new Magazine();
-            const ui = new UIController(magazine);
-
-            // Service Worker Registration
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js').catch(err => {
-                    console.log('SW registration failed:', err);
-                });
-            }
-
-            // Demo Data (uncomment to add sample materials)
-            /*
-            if (magazine.materials.length === 0) {
-                magazine.addMaterial({ type: 'ABS', name: 'ABS Biały', color: 'Biały', code: 'ABS-001', quantity: 25, unit: 'mb', notes: '' });
-                magazine.addMaterial({ type: 'ABS', name: 'ABS Czarny', color: 'Czarny', code: 'ABS-002', quantity: 15, unit: 'mb', notes: '' });
-                magazine.addMaterial({ type: 'Płyty', name: 'Płyta OSB', color: 'Naturalna', code: 'OSB-001', quantity: 8, unit: 'szt', notes: '' });
-                ui.render();
-            }
-            */
-        });
+        // Initialize
+        const uiController = new UIController();
     </script>
 </body>
 </html>
