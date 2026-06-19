@@ -16,32 +16,42 @@ body.dark-mode {
   color: #e0e0e0;
 }
 
-/* STICKY HEADER */
+/* STICKY HEADER - CZARNY PASEK */
 header {
-  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  background: #1a1a1a;
   color: white;
-  padding: 15px 20px;
+  padding: 10px 20px;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: space-between;
 }
 
 body.dark-mode header {
-  background: linear-gradient(135deg, #004d99 0%, #003366 100%);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  background: #0f0f0f;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
 }
 
-header h1 {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
+header .logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  max-width: 200px;
+}
+
+header .header-content {
+  flex: 1;
 }
 
 header .controls {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 header input[type="text"] {
@@ -60,9 +70,9 @@ header input[type="text"]::placeholder {
 
 header button {
   padding: 8px 15px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
   color: white;
-  border: 1px solid white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
@@ -70,16 +80,12 @@ header button {
 }
 
 header button:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 header button.active {
   background: white;
-  color: #0066cc;
-}
-
-body.dark-mode header button.active {
-  color: #004d99;
+  color: #1a1a1a;
 }
 
 /* MAIN CONTENT */
@@ -123,28 +129,28 @@ main {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: 0.3s;
-  border-left: 5px solid #0066cc;
+  border-left: 5px solid #cc3333;
 }
 
 body.dark-mode .material-card {
   background: #2a2a2a;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  border-left-color: #0052a3;
+  border-left-color: #cc3333;
 }
 
 .material-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+  box-shadow: 0 4px 12px rgba(204, 51, 51, 0.2);
 }
 
 .material-card h3 {
   font-size: 16px;
   margin-bottom: 5px;
-  color: #0066cc;
+  color: #cc3333;
 }
 
 body.dark-mode .material-card h3 {
-  color: #66b3ff;
+  color: #ff6666;
 }
 
 .material-card .code {
@@ -249,14 +255,14 @@ body.dark-mode .form-group select {
 
 .form-group input:focus,
 .form-group select:focus {
-  border-color: #0066cc;
+  border-color: #cc3333;
   outline: none;
 }
 
 .form-group button {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+  background: #cc3333;
   color: white;
   border: none;
   border-radius: 5px;
@@ -268,7 +274,8 @@ body.dark-mode .form-group select {
 
 .form-group button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+  background: #990000;
+  box-shadow: 0 4px 12px rgba(204, 51, 51, 0.3);
 }
 
 /* EDIT MODAL */
@@ -304,11 +311,11 @@ body.dark-mode .modal-content {
 
 .modal-content h2 {
   margin-bottom: 15px;
-  color: #0066cc;
+  color: #cc3333;
 }
 
 body.dark-mode .modal-content h2 {
-  color: #66b3ff;
+  color: #ff6666;
 }
 
 .modal-content .form-group input {
@@ -342,12 +349,12 @@ body.dark-mode .modal-content .form-group input {
 }
 
 .modal-buttons .btn-save {
-  background: #0066cc;
+  background: #cc3333;
   color: white;
 }
 
 .modal-buttons .btn-save:hover {
-  background: #0052a3;
+  background: #990000;
 }
 
 .modal-buttons .btn-delete {
@@ -380,7 +387,7 @@ nav {
   left: 0;
   right: 0;
   background: white;
-  border-top: 2px solid #0066cc;
+  border-top: 2px solid #cc3333;
   display: flex;
   justify-content: space-around;
   padding: 10px 0;
@@ -389,7 +396,7 @@ nav {
 
 body.dark-mode nav {
   background: #2a2a2a;
-  border-top-color: #0052a3;
+  border-top-color: #cc3333;
 }
 
 nav button {
@@ -409,13 +416,13 @@ body.dark-mode nav button {
 }
 
 nav button.active {
-  color: #0066cc;
-  border-bottom: 3px solid #0066cc;
+  color: #cc3333;
+  border-bottom: 3px solid #cc3333;
 }
 
 body.dark-mode nav button.active {
-  color: #66b3ff;
-  border-bottom-color: #0052a3;
+  color: #ff6666;
+  border-bottom-color: #cc3333;
 }
 
 /* ADMIN PANEL */
@@ -470,11 +477,22 @@ body.dark-mode .admin-panel h3 {
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  header h1 {
-    font-size: 18px;
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  header .logo {
+    height: 50px;
+    width: 100%;
+  }
+
+  header .header-content {
+    width: 100%;
   }
 
   header .controls {
+    width: 100%;
     flex-direction: column;
   }
 
