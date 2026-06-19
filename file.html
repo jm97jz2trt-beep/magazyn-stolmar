@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#7c3aed">
+    <meta name="description" content="Magazyn materiałów Egger - PWA">
+    <title>StolMar Magazyn</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%237c3aed' width='192' height='192'/><text x='50%' y='50%' font-size='100' fill='white' text-anchor='middle' dy='.3em'>M</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%237c3aed' width='180' height='180'/><text x='50%' y='50%' font-size='90' fill='white' text-anchor='middle' dy='.3em'>M</text></svg>">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>📦 StolMar</h1>
+            <button class="admin-btn" id="adminBtn">👤</button>
+        </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="🔍 Szukaj materiału..." class="search-input">
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div id="listaView" class="view active">
+            <div id="materialsList" class="materials-list"></div>
+            <div id="emptyState" class="empty-state">
+                <p>📭 Brak materiałów</p>
+                <p class="empty-hint">Dodaj pierwszy materiał!</p>
+            </div>
+        </div>
+
+        <div id="dodajView" class="view">
+            <form id="addForm" class="add-form">
+                <div class="form-group">
+                    <label for="nazwa">Nazwa materiału *</label>
+                    <input type="text" id="nazwa" required placeholder="np. ABS czarny">
+                </div>
+
+                <div class="form-group">
+                    <label for="typ">Typ *</label>
+                    <select id="typ" required>
+                        <option value="">-- Wybierz typ --</option>
+                        <option value="ABS">ABS</option>
+                        <option value="Płyty">Płyty</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="ilosc">Ilość (szt) *</label>
+                    <input type="number" id="ilosc" required placeholder="0" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="wymiary">Wymiary</label>
+                    <input type="text" id="wymiary" placeholder="np. 2440x1220">
+                </div>
+
+                <div class="form-group">
+                    <label for="uwagi">Uwagi</label>
+                    <textarea id="uwagi" placeholder="Dodatkowe informacje..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary">✅ Dodaj materiał</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" data-view="listaView">📋 Lista</button>
+        <button class="nav-btn" data-view="dodajView">➕ Dodaj</button>
+    </nav>
+
+    <!-- Admin Panel Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>👤 Admin Panel</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <button id="exportBtn" class="btn-secondary">📥 Eksportuj dane (JSON)</button>
+                <button id="clearBtn" class="btn-danger">🗑️ Wyczyść magazyn</button>
+                <p class="modal-info">⚠️ Ostrożnie! Wyczyszczenie nie może być cofnięte.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
