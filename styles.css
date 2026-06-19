@@ -1,0 +1,362 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #8B5CF6;
+    --primary-dark: #7C3AED;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --text: #1F2937;
+    --bg: #FFFFFF;
+    --border: #E5E7EB;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text: #F3F4F6;
+        --bg: #111827;
+        --border: #374151;
+    }
+}
+
+html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.admin-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
+    color: white;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.admin-btn:active {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.admin-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+.admin-panel.hidden {
+    display: none;
+    opacity: 0;
+}
+
+.admin-content {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 300px;
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.admin-content h2 {
+    margin-bottom: 20px;
+    color: var(--primary);
+}
+
+.admin-button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.export-btn {
+    background: var(--success);
+    color: white;
+}
+
+.export-btn:active {
+    opacity: 0.8;
+}
+
+.clear-btn {
+    background: var(--danger);
+    color: white;
+}
+
+.clear-btn:active {
+    opacity: 0.8;
+}
+
+.close-btn {
+    background: var(--border);
+    color: var(--text);
+}
+
+.close-btn:active {
+    opacity: 0.8;
+}
+
+.container {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 60px;
+}
+
+.view {
+    display: none;
+    padding: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.view.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.search-box {
+    margin-bottom: 16px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+    background: var(--bg);
+    color: var(--text);
+    transition: border-color 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.materials-list {
+    display: grid;
+    gap: 12px;
+}
+
+.material-card {
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.material-card:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+.material-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 8px;
+}
+
+.material-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.material-kod {
+    font-size: 12px;
+    color: #6B7280;
+    font-weight: 600;
+}
+
+.material-status {
+    font-size: 20px;
+}
+
+.material-details {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+}
+
+.material-detail {
+    flex: 1;
+}
+
+.detail-label {
+    font-size: 12px;
+    color: #9CA3AF;
+}
+
+.detail-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.add-form {
+    display: grid;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+}
+
+.form-group input,
+.form-group select {
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+    background: var(--bg);
+    color: var(--text);
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.submit-btn {
+    padding: 14px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+}
+
+.submit-btn:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    background: var(--bg);
+    border-top: 2px solid var(--border);
+    z-index: 100;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.nav-btn {
+    padding: 14px;
+    background: var(--bg);
+    border: none;
+    color: #9CA3AF;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+}
+
+.nav-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+.nav-btn:active {
+    background: rgba(139, 92, 246, 0.1);
+}
+
+@media (max-width: 320px) {
+    .header h1 {
+        font-size: 18px;
+    }
+    
+    .material-header {
+        flex-direction: column;
+    }
+    
+    .material-status {
+        margin-top: 8px;
+    }
+}
