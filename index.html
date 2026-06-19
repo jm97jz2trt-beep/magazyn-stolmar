@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="StolMar Magazyn - Zarządzanie materiałami Egger">
+    <meta name="theme-color" content="#8B5CF6">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%238B5CF6' width='180' height='180'/><text x='50%' y='50%' font-size='90' fill='white' text-anchor='middle' dominant-baseline='middle' font-weight='bold'>S</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%238B5CF6' width='180' height='180'/><text x='50%' y='50%' font-size='90' fill='white' text-anchor='middle' dominant-baseline='middle' font-weight='bold'>S</text></svg>">
+    <title>StolMar Magazyn</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <h1>📦 StolMar Magazyn</h1>
+            <button class="admin-btn" id="adminBtn">👤</button>
+        </div>
+    </header>
+
+    <!-- ADMIN PANEL (hidden by default) -->
+    <div id="adminPanel" class="admin-panel hidden">
+        <div class="admin-content">
+            <h2>Admin Panel</h2>
+            <button id="exportBtn" class="admin-button export-btn">📥 Eksportuj JSON</button>
+            <button id="clearBtn" class="admin-button clear-btn">🗑️ Wyczyść dane</button>
+            <button id="closeAdminBtn" class="admin-button close-btn">✕ Zamknij</button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="container">
+        <!-- LISTA VIEW -->
+        <div id="listaView" class="view active">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Szukaj materiału..." class="search-input">
+            </div>
+            <div id="materialsList" class="materials-list">
+                <!-- Materiały będą tu wpisywane dynamicznie -->
+            </div>
+        </div>
+
+        <!-- DODAJ VIEW -->
+        <div id="dodajView" class="view">
+            <form id="addForm" class="add-form">
+                <div class="form-group">
+                    <label for="nazwa">Nazwa materiału:</label>
+                    <input type="text" id="nazwa" required>
+                </div>
+                <div class="form-group">
+                    <label for="kod">Kod Egger:</label>
+                    <input type="text" id="kod" required>
+                </div>
+                <div class="form-group">
+                    <label for="ilosc">Ilość:</label>
+                    <input type="number" id="ilosc" required>
+                </div>
+                <div class="form-group">
+                    <label for="typ">Typ:</label>
+                    <select id="typ" required>
+                        <option value="">-- Wybierz typ --</option>
+                        <option value="ABS">ABS</option>
+                        <option value="Płyty">Płyty</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">✅ Dodaj materiał</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" data-view="listaView">📋 Lista</button>
+        <button class="nav-btn" data-view="dodajView">➕ Dodaj</button>
+    </nav>
+
+    <!-- SCRIPTS -->
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
+    </script>
+</body>
+</html>
