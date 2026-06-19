@@ -1,4 +1,4 @@
-const CACHE_NAME = 'stolmar-v1';
+const CACHE_NAME = 'magazine-v2';
 const urlsToCache = [
     '/magazyn-stolmar/',
     '/magazyn-stolmar/index.html',
