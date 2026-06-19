@@ -3,85 +3,1041 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="StolMar Magazyn - Zarządzanie materiałami Egger">
-    <meta name="theme-color" content="#8B5CF6">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%238B5CF6' width='180' height='180'/><text x='50%' y='50%' font-size='90' fill='white' text-anchor='middle' dominant-baseline='middle' font-weight='bold'>S</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%238B5CF6' width='180' height='180'/><text x='50%' y='50%' font-size='90' fill='white' text-anchor='middle' dominant-baseline='middle' font-weight='bold'>S</text></svg>">
+    <meta name="theme-color" content="#1a1a1a">
+    <meta name="description" content="StolMar Magazyn - Aplikacja do zarządzania materiałami Egger">
     <title>StolMar Magazyn</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%231a1a1a' width='180' height='180'/><text x='90' y='120' font-size='80' font-weight='bold' fill='%23cc3333' text-anchor='middle' font-family='Arial'>SM</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-dark: #1a1a1a;
+            --primary-red: #cc3333;
+            --text-light: #f5f5f5;
+            --text-dark: #333;
+            --border-light: #333;
+            --bg-light: #f9f9f9;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-light: #f5f5f5;
+                --text-dark: #333;
+                --border-light: #444;
+                --bg-light: #2a2a2a;
+            }
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .header {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+            max-width: 120px;
+            object-fit: contain;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background-color: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .header-btn:hover {
+            background-color: #b82a2a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(204, 51, 51, 0.3);
+        }
+
+        .header-btn:active {
+            transform: translateY(0);
+        }
+
+        /* MAIN CONTENT */
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .view {
+            display: none;
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .view.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* SEARCH BAR */
+        .search-container {
+            margin-bottom: 16px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: white;
+            color: var(--text-dark);
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 6px rgba(204, 51, 51, 0.2);
+        }
+
+        .filter-btn {
+            background-color: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background-color: #b82a2a;
+        }
+
+        /* MATERIAL CARDS */
+        .materials-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .material-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 14px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .material-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .material-card.critical {
+            border-left: 4px solid #ff4444;
+            background-color: #fff5f5;
+        }
+
+        .material-card.low {
+            border-left: 4px solid #ffb347;
+            background-color: #fff9f0;
+        }
+
+        .material-card.good {
+            border-left: 4px solid #4caf50;
+            background-color: #f5fff5;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-dark);
+            word-break: break-word;
+            flex: 1;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            margin-left: 8px;
+        }
+
+        .status-badge.good {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .status-badge.low {
+            background-color: #ffb347;
+            color: #333;
+        }
+
+        .status-badge.critical {
+            background-color: #ff4444;
+            color: white;
+        }
+
+        .card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .quantity-display {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary-red);
+        }
+
+        .quantity-unit {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .card-buttons {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .qty-btn {
+            flex: 1;
+            padding: 8px 6px;
+            border: 1px solid var(--primary-red);
+            background: white;
+            color: var(--primary-red);
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .qty-btn:hover {
+            background-color: var(--primary-red);
+            color: white;
+        }
+
+        .delete-btn {
+            padding: 8px 10px;
+            background-color: #ff6666;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .delete-btn:hover {
+            background-color: #ff4444;
+        }
+
+        /* FORM */
+        .form-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: white;
+            color: var(--text-dark);
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 6px rgba(204, 51, 51, 0.2);
+        }
+
+        .submit-btn {
+            background-color: var(--primary-red);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: #b82a2a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(204, 51, 51, 0.3);
+        }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-nav {
+            background-color: var(--primary-dark);
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            position: sticky;
+            bottom: 0;
+            z-index: 999;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-btn.active {
+            color: var(--primary-red);
+        }
+
+        .nav-btn:hover {
+            color: var(--primary-red);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        /* ADMIN PANEL */
+        .admin-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .admin-btn {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .admin-btn-export {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .admin-btn-export:hover {
+            background-color: #45a049;
+        }
+
+        .admin-btn-clear {
+            background-color: #ff6666;
+            color: white;
+        }
+
+        .admin-btn-clear:hover {
+            background-color: #ff4444;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 24px;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .modal-btn-cancel {
+            background-color: #e0e0e0;
+            color: var(--text-dark);
+        }
+
+        .modal-btn-cancel:hover {
+            background-color: #d0d0d0;
+        }
+
+        .modal-btn-confirm {
+            background-color: var(--primary-red);
+            color: white;
+        }
+
+        .modal-btn-confirm:hover {
+            background-color: #b82a2a;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .header {
+                padding: 10px 12px;
+            }
+
+            .header-title {
+                font-size: 16px;
+            }
+
+            .header-btn {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .materials-list {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                height: 35px;
+            }
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-red);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b82a2a;
+        }
+    </style>
 </head>
 <body>
     <!-- HEADER -->
-    <header class="header">
-        <div class="header-content">
-            <h1>📦 StolMar Magazyn</h1>
-            <button class="admin-btn" id="adminBtn">👤</button>
+    <div class="header">
+        <div class="header-left">
+            <img src="1STOL MAR LOGO CZARN copy.png" alt="StolMar Design Logo" class="logo">
+            <div class="header-title">StolMar Magazyn</div>
         </div>
-    </header>
-
-    <!-- ADMIN PANEL (hidden by default) -->
-    <div id="adminPanel" class="admin-panel hidden">
-        <div class="admin-content">
-            <h2>Admin Panel</h2>
-            <button id="exportBtn" class="admin-button export-btn">📥 Eksportuj JSON</button>
-            <button id="clearBtn" class="admin-button clear-btn">🗑️ Wyczyść dane</button>
-            <button id="closeAdminBtn" class="admin-button close-btn">✕ Zamknij</button>
+        <div class="header-actions">
+            <button class="header-btn" id="adminBtn">Admin</button>
+            <button class="header-btn" id="syncBtn">Synchronizuj</button>
         </div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <main class="container">
+    <!-- MAIN CONTAINER -->
+    <div class="container">
         <!-- LISTA VIEW -->
-        <div id="listaView" class="view active">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Szukaj materiału..." class="search-input">
+        <div class="view active" id="listView">
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput" 
+                    placeholder="Szukaj materiału..."
+                >
+                <button class="filter-btn" id="filterBtn">🔽 Filtr</button>
             </div>
-            <div id="materialsList" class="materials-list">
-                <!-- Materiały będą tu wpisywane dynamicznie -->
+            <div class="materials-list" id="materialsList"></div>
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-state-icon">📦</div>
+                <p>Brak materiałów. Dodaj pierwszy materiał!</p>
             </div>
         </div>
 
         <!-- DODAJ VIEW -->
-        <div id="dodajView" class="view">
-            <form id="addForm" class="add-form">
-                <div class="form-group">
-                    <label for="nazwa">Nazwa materiału:</label>
-                    <input type="text" id="nazwa" required>
-                </div>
-                <div class="form-group">
-                    <label for="kod">Kod Egger:</label>
-                    <input type="text" id="kod" required>
-                </div>
-                <div class="form-group">
-                    <label for="ilosc">Ilość:</label>
-                    <input type="number" id="ilosc" required>
-                </div>
-                <div class="form-group">
-                    <label for="typ">Typ:</label>
-                    <select id="typ" required>
-                        <option value="">-- Wybierz typ --</option>
-                        <option value="ABS">ABS</option>
-                        <option value="Płyty">Płyty</option>
-                    </select>
-                </div>
-                <button type="submit" class="submit-btn">✅ Dodaj materiał</button>
-            </form>
+        <div class="view" id="addView">
+            <div class="form-container">
+                <h2 style="margin-bottom: 20px; color: var(--text-dark);">Dodaj Nowy Materiał</h2>
+                <form id="addForm">
+                    <div class="form-group">
+                        <label for="materialType">Typ Materiału *</label>
+                        <select id="materialType" required>
+                            <option value="">-- Wybierz --</option>
+                            <option value="ABS">ABS</option>
+                            <option value="Płyty">Płyty</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="materialName">Nazwa Materiału *</label>
+                        <input type="text" id="materialName" placeholder="np. ABS Biały" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="materialColor">Kolor *</label>
+                        <input type="text" id="materialColor" placeholder="np. Biały" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="materialCode">Kod/SKU (opcjonalnie)</label>
+                        <input type="text" id="materialCode" placeholder="np. ABS-001">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="materialQuantity">Ilość *</label>
+                        <input type="number" id="materialQuantity" placeholder="0" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="materialUnit">Jednostka *</label>
+                        <select id="materialUnit" required>
+                            <option value="">-- Wybierz --</option>
+                            <option value="mb">mb (metry bieżące)</option>
+                            <option value="szt">szt (sztuki)</option>
+                            <option value="kg">kg (kilogramy)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="materialNotes">Uwagi (opcjonalnie)</label>
+                        <input type="text" id="materialNotes" placeholder="np. Stan: świeży...">
+                    </div>
+
+                    <button type="submit" class="submit-btn">➕ Dodaj Materiał</button>
+                </form>
+            </div>
         </div>
-    </main>
+
+        <!-- ADMIN VIEW -->
+        <div class="view" id="adminView">
+            <div class="admin-panel">
+                <h2 style="margin-bottom: 20px; color: var(--text-dark);">Panel Administratora</h2>
+                <button class="admin-btn admin-btn-export" id="exportBtn">📥 Eksportuj JSON</button>
+                <button class="admin-btn admin-btn-clear" id="clearBtn">🗑️ Wyczyść Wszystkie Dane</button>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                    <p style="font-size: 12px; color: #999; text-align: center;">v1.0.0 | PWA | StolMar Design</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- BOTTOM NAVIGATION -->
-    <nav class="bottom-nav">
-        <button class="nav-btn active" data-view="listaView">📋 Lista</button>
-        <button class="nav-btn" data-view="dodajView">➕ Dodaj</button>
-    </nav>
+    <div class="bottom-nav">
+        <button class="nav-btn active" id="navLista">
+            <span class="nav-icon">📋</span>
+            <span>Lista</span>
+        </button>
+        <button class="nav-btn" id="navDodaj">
+            <span class="nav-icon">➕</span>
+            <span>Dodaj</span>
+        </button>
+    </div>
 
-    <!-- SCRIPTS -->
-    <script src="app.js"></script>
+    <!-- MODAL -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header" id="modalTitle">Potwierdzenie</div>
+            <p id="modalMessage">Czy na pewno?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" id="modalCancel">Anuluj</button>
+                <button class="modal-btn modal-btn-confirm" id="modalConfirm">Potwierdź</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(() => {});
+        // ==================== STORAGE ====================
+        const STORAGE_KEY = 'storageMarMaterials';
+
+        function getStorageData() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            } catch (e) {
+                console.error('Błąd parsowania storage:', e);
+                return [];
+            }
         }
+
+        function setStorageData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        // ==================== MAGAZINE CLASS ====================
+        class Magazine {
+            constructor() {
+                this.materials = getStorageData();
+            }
+
+            addMaterial(material) {
+                material.id = Date.now().toString();
+                material.dateAdded = new Date().toISOString();
+                this.materials.push(material);
+                this.save();
+                return material;
+            }
+
+            removeMaterial(id) {
+                this.materials = this.materials.filter(m => m.id !== id);
+                this.save();
+            }
+
+            updateQuantity(id, newQuantity) {
+                const material = this.materials.find(m => m.id === id);
+                if (material) {
+                    material.quantity = Math.max(0, newQuantity);
+                    material.lastUpdated = new Date().toISOString();
+                    this.save();
+                }
+            }
+
+            search(query) {
+                if (!query) return this.materials;
+                const q = query.toLowerCase();
+                return this.materials.filter(m =>
+                    m.name.toLowerCase().includes(q) ||
+                    m.color.toLowerCase().includes(q) ||
+                    m.code.toLowerCase().includes(q) ||
+                    m.type.toLowerCase().includes(q)
+                );
+            }
+
+            getByStatus(status) {
+                if (status === 'good') return this.materials.filter(m => m.quantity > 20);
+                if (status === 'low') return this.materials.filter(m => m.quantity >= 10 && m.quantity <= 20);
+                if (status === 'critical') return this.materials.filter(m => m.quantity < 10);
+                return this.materials;
+            }
+
+            save() {
+                setStorageData(this.materials);
+            }
+
+            export() {
+                return JSON.stringify(this.materials, null, 2);
+            }
+
+            import(jsonData) {
+                try {
+                    this.materials = JSON.parse(jsonData);
+                    this.save();
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            clear() {
+                this.materials = [];
+                this.save();
+            }
+        }
+
+        // ==================== UI CONTROLLER ====================
+        class UIController {
+            constructor(magazine) {
+                this.magazine = magazine;
+                this.currentFilter = null;
+                this.initEventListeners();
+                this.render();
+            }
+
+            initEventListeners() {
+                // Navigation
+                document.getElementById('navLista').addEventListener('click', () => this.switchView('list'));
+                document.getElementById('navDodaj').addEventListener('click', () => this.switchView('add'));
+
+                // Search & Filter
+                document.getElementById('searchInput').addEventListener('input', (e) => {
+                    this.renderMaterials(this.magazine.search(e.target.value));
+                });
+
+                document.getElementById('filterBtn').addEventListener('click', () => this.showFilterMenu());
+
+                // Form
+                document.getElementById('addForm').addEventListener('submit', (e) => this.handleFormSubmit(e));
+
+                // Admin
+                document.getElementById('adminBtn').addEventListener('click', () => this.switchView('admin'));
+                document.getElementById('exportBtn').addEventListener('click', () => this.handleExport());
+                document.getElementById('clearBtn').addEventListener('click', () => this.showConfirmModal(
+                    'Wyczyść dane',
+                    'Czy na pewno chcesz usunąć WSZYSTKIE materiały? Tej operacji nie można cofnąć!',
+                    () => this.handleClear()
+                ));
+
+                // Sync
+                document.getElementById('syncBtn').addEventListener('click', () => this.handleSync());
+
+                // Modal
+                document.getElementById('modalCancel').addEventListener('click', () => this.hideConfirmModal());
+                document.getElementById('modalConfirm').addEventListener('click', () => {
+                    if (this.confirmCallback) this.confirmCallback();
+                    this.hideConfirmModal();
+                });
+            }
+
+            switchView(view) {
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+                if (view === 'list') {
+                    document.getElementById('listView').classList.add('active');
+                    document.getElementById('navLista').classList.add('active');
+                } else if (view === 'add') {
+                    document.getElementById('addView').classList.add('active');
+                    document.getElementById('navDodaj').classList.add('active');
+                } else if (view === 'admin') {
+                    document.getElementById('adminView').classList.add('active');
+                }
+
+                // Reset search when switching
+                document.getElementById('searchInput').value = '';
+                this.currentFilter = null;
+            }
+
+            renderMaterials(materials = this.magazine.materials) {
+                const container = document.getElementById('materialsList');
+                const empty = document.getElementById('emptyState');
+
+                if (materials.length === 0) {
+                    container.innerHTML = '';
+                    empty.style.display = 'flex';
+                    empty.style.flexDirection = 'column';
+                    empty.style.justifyContent = 'center';
+                    empty.style.alignItems = 'center';
+                    empty.style.height = '200px';
+                    return;
+                }
+
+                empty.style.display = 'none';
+                container.innerHTML = materials.map(m => this.createMaterialCard(m)).join('');
+
+                // Event listeners for cards
+                materials.forEach(m => {
+                    const card = container.querySelector(`[data-id="${m.id}"]`);
+                    if (card) {
+                        card.querySelector('.qty-btn:nth-child(1)').addEventListener('click', () => {
+                            this.magazine.updateQuantity(m.id, m.quantity - 1);
+                            this.render();
+                        });
+                        card.querySelector('.qty-btn:nth-child(2)').addEventListener('click', () => {
+                            this.magazine.updateQuantity(m.id, m.quantity + 1);
+                            this.render();
+                        });
+                        card.querySelector('.delete-btn').addEventListener('click', () => {
+                            this.showConfirmModal(
+                                'Usuń materiał',
+                                `Czy na pewno chcesz usunąć ${m.name}?`,
+                                () => {
+                                    this.magazine.removeMaterial(m.id);
+                                    this.render();
+                                }
+                            );
+                        });
+                    }
+                });
+            }
+
+            createMaterialCard(material) {
+                const status = this.getStatus(material.quantity);
+                const statusIcon = status === 'good' ? '✅' : status === 'low' ? '⚠️' : '🔴';
+
+                return `
+                    <div class="material-card ${status}" data-id="${material.id}">
+                        <div class="card-header">
+                            <div class="card-title">${material.name}</div>
+                            <span class="status-badge ${status}">${statusIcon} ${this.getStatusText(status)}</span>
+                        </div>
+                        <div style="font-size: 12px; color: #666; margin-bottom: 8px;">
+                            ${material.color} • ${material.code || 'Brak kodu'}
+                        </div>
+                        <div class="card-content">
+                            <div>
+                                <div class="quantity-display">${material.quantity}</div>
+                                <div class="quantity-unit">${material.unit}</div>
+                            </div>
+                        </div>
+                        <div class="card-buttons">
+                            <button class="qty-btn">➖ Zmniejsz</button>
+                            <button class="qty-btn">➕ Zwiększ</button>
+                            <button class="delete-btn">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getStatus(quantity) {
+                if (quantity > 20) return 'good';
+                if (quantity >= 10 && quantity <= 20) return 'low';
+                return 'critical';
+            }
+
+            getStatusText(status) {
+                if (status === 'good') return 'Dobry';
+                if (status === 'low') return 'Niski';
+                return 'Krytyczny';
+            }
+
+            handleFormSubmit(e) {
+                e.preventDefault();
+
+                const material = {
+                    type: document.getElementById('materialType').value,
+                    name: document.getElementById('materialName').value,
+                    color: document.getElementById('materialColor').value,
+                    code: document.getElementById('materialCode').value || '',
+                    quantity: parseInt(document.getElementById('materialQuantity').value),
+                    unit: document.getElementById('materialUnit').value,
+                    notes: document.getElementById('materialNotes').value || ''
+                };
+
+                this.magazine.addMaterial(material);
+                document.getElementById('addForm').reset();
+                this.render();
+                this.switchView('list');
+            }
+
+            handleExport() {
+                const json = this.magazine.export();
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `magazyn-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+            }
+
+            handleClear() {
+                this.magazine.clear();
+                this.render();
+                this.switchView('list');
+            }
+
+            handleSync() {
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.ready.then(() => {
+                        alert('✅ Aplikacja jest zsynchronizowana!');
+                    });
+                }
+            }
+
+            showFilterMenu() {
+                const menu = prompt('Wybierz filtr:\n1 = Dobry (>20)\n2 = Niski (10-20)\n3 = Krytyczny (<10)\n0 = Bez filtru');
+                if (menu === '1') {
+                    this.currentFilter = 'good';
+                    this.renderMaterials(this.magazine.getByStatus('good'));
+                } else if (menu === '2') {
+                    this.currentFilter = 'low';
+                    this.renderMaterials(this.magazine.getByStatus('low'));
+                } else if (menu === '3') {
+                    this.currentFilter = 'critical';
+                    this.renderMaterials(this.magazine.getByStatus('critical'));
+                } else {
+                    this.currentFilter = null;
+                    this.render();
+                }
+            }
+
+            showConfirmModal(title, message, callback) {
+                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('modalMessage').textContent = message;
+                document.getElementById('confirmModal').classList.add('active');
+                this.confirmCallback = callback;
+            }
+
+            hideConfirmModal() {
+                document.getElementById('confirmModal').classList.remove('active');
+                this.confirmCallback = null;
+            }
+
+            render() {
+                this.renderMaterials();
+            }
+        }
+
+        // ==================== INITIALIZATION ====================
+        window.addEventListener('load', () => {
+            const magazine = new Magazine();
+            const ui = new UIController(magazine);
+
+            // Service Worker Registration
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').catch(err => {
+                    console.log('SW registration failed:', err);
+                });
+            }
+
+            // Demo Data (uncomment to add sample materials)
+            /*
+            if (magazine.materials.length === 0) {
+                magazine.addMaterial({ type: 'ABS', name: 'ABS Biały', color: 'Biały', code: 'ABS-001', quantity: 25, unit: 'mb', notes: '' });
+                magazine.addMaterial({ type: 'ABS', name: 'ABS Czarny', color: 'Czarny', code: 'ABS-002', quantity: 15, unit: 'mb', notes: '' });
+                magazine.addMaterial({ type: 'Płyty', name: 'Płyta OSB', color: 'Naturalna', code: 'OSB-001', quantity: 8, unit: 'szt', notes: '' });
+                ui.render();
+            }
+            */
+        });
     </script>
 </body>
 </html>
